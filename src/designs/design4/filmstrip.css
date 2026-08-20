@@ -1,0 +1,338 @@
+.filmstrip {
+  --fs-bg: #1c1917;
+  --fs-fg: #fafaf9;
+  --fs-accent: #f97316;
+  --fs-muted: #a8a29e;
+  --fs-frame-bg: #292524;
+
+  height: 500vh;
+  background: var(--fs-bg);
+  color: var(--fs-fg);
+  font-family: 'Bebas Neue', 'Space Grotesk', system-ui, sans-serif;
+  position: relative;
+}
+
+.filmstrip .skip-link:focus {
+  --skip-bg: var(--fs-accent);
+  --skip-fg: var(--fs-bg);
+}
+
+.fs-fixed-ui {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: rgba(28, 25, 23, 0.9);
+  border-bottom: 2px solid var(--fs-accent);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 0.8125rem;
+}
+
+.fs-back {
+  color: var(--fs-accent);
+  text-decoration: none;
+  font-weight: 600;
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.fs-back:focus-visible {
+  outline: 2px solid var(--fs-accent);
+  outline-offset: 2px;
+}
+
+.fs-frame-indicator {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.fs-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  background: var(--fs-muted);
+  border-radius: 50%;
+}
+
+.fs-scroll-hint {
+  margin: 0;
+  color: var(--fs-muted);
+  font-size: 0.75rem;
+}
+
+.fs-scroll-spacer {
+  height: 1px;
+}
+
+.fs-viewport {
+  position: fixed;
+  top: 3.5rem;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+.fs-track {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+}
+
+.fs-frame {
+  flex: 0 0 100vw;
+  height: 100%;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--fs-frame-bg);
+  border-right: 4px solid var(--fs-accent);
+  overflow-y: auto;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+}
+
+.fs-frame-label {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  color: var(--fs-accent);
+  margin-bottom: 1rem;
+}
+
+.fs-hero-title {
+  margin: 0 0 1rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3rem, 12vw, 7rem);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+}
+
+.fs-hero-title span {
+  display: block;
+  color: var(--fs-accent);
+}
+
+.fs-hero-body {
+  margin: 0 0 1rem;
+  max-width: 32rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.fs-quote {
+  margin: 0 0 1.5rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--fs-accent);
+  font-size: 0.9375rem;
+  color: var(--fs-muted);
+  font-style: italic;
+  max-width: 28rem;
+}
+
+.fs-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.fs-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.625rem 1.5rem;
+  background: var(--fs-accent);
+  color: var(--fs-bg);
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.fs-btn-ghost {
+  background: transparent;
+  color: var(--fs-fg);
+  border: 2px solid var(--fs-fg);
+}
+
+.fs-btn:focus-visible {
+  outline: 2px solid var(--fs-fg);
+  outline-offset: 2px;
+}
+
+.fs-frame h2 {
+  margin: 0 0 1rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  letter-spacing: 0.03em;
+}
+
+.fs-intro {
+  margin: 0 0 1.5rem;
+  max-width: 36rem;
+  color: var(--fs-muted);
+  line-height: 1.6;
+}
+
+.fs-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 36rem;
+}
+
+.fs-steps li {
+  display: flex;
+  gap: 1rem;
+}
+
+.fs-step-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  color: var(--fs-accent);
+  line-height: 1;
+}
+
+.fs-steps h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.125rem;
+}
+
+.fs-steps p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--fs-muted);
+  line-height: 1.55;
+}
+
+.fs-feature-scroll {
+  display: grid;
+  gap: 0.75rem;
+  max-height: 50vh;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.fs-feature-card {
+  padding: 0.875rem;
+  border: 1px solid rgba(250, 250, 249, 0.15);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.fs-feature-card h3 {
+  margin: 0 0 0.25rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.fs-feature-card p {
+  margin: 0;
+  font-size: 0.8125rem;
+  color: var(--fs-muted);
+  line-height: 1.5;
+}
+
+.fs-muted {
+  color: var(--fs-muted);
+  font-size: 0.9375rem;
+}
+
+.fs-code {
+  margin: 1rem 0;
+  padding: 0.875rem;
+  background: #0c0a09;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.fs-link-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.fs-link-list a {
+  color: var(--fs-accent);
+  font-weight: 600;
+  min-height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.fs-link-list a:focus-visible {
+  outline: 2px solid var(--fs-accent);
+  outline-offset: 2px;
+}
+
+.fs-cta-body {
+  margin: 0 0 1.5rem;
+  font-size: 1.125rem;
+  max-width: 24rem;
+}
+
+.fs-end-mark {
+  margin: 2rem 0 0;
+  font-size: 2rem;
+  color: var(--fs-accent);
+}
+
+.fs-reduced-fallback {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .filmstrip {
+    height: auto;
+  }
+
+  .fs-viewport {
+    position: static;
+    overflow: visible;
+  }
+
+  .fs-track {
+    flex-direction: column;
+    transform: none !important;
+  }
+
+  .fs-frame {
+    flex: none;
+    min-height: auto;
+    border-right: none;
+    border-bottom: 4px solid var(--fs-accent);
+  }
+
+  .fs-scroll-hint {
+    display: none;
+  }
+
+  .fs-reduced-fallback {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .fs-scroll-hint {
+    display: none;
+  }
+
+  .fs-frame {
+    padding: 1.5rem 1rem;
+  }
+}
