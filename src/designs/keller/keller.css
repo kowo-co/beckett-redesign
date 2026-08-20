@@ -1,0 +1,72 @@
+.keller {
+  --k-bg: #f4f0e8;
+  --k-ink: #1a1a18;
+  --k-accent: #2a5f7a;
+  --k-muted: #6b6560;
+  --k-grid: rgba(42, 95, 122, 0.12);
+  --k-surface: #ebe6dc;
+
+  font-family: 'IBM Plex Mono', monospace;
+  background: var(--k-bg);
+  color: var(--k-ink);
+  min-height: 100dvh;
+}
+
+.keller__grid-bg {
+  background-image:
+    linear-gradient(var(--k-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--k-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.keller__display {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.04em;
+  line-height: 0.9;
+}
+
+.keller__hero-img {
+  filter: sepia(0.15) contrast(1.05);
+}
+
+.keller__phase {
+  border-left: 3px solid var(--k-accent);
+  padding-left: 1rem;
+}
+
+.keller input[type='range'] {
+  accent-color: var(--k-accent);
+  min-height: 44px;
+}
+
+.keller input[type='email'] {
+  border: 2px solid var(--k-ink);
+  background: var(--k-bg);
+  font-family: inherit;
+  min-height: 44px;
+}
+
+.keller button,
+.keller a.keller__btn {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.keller button:focus-visible,
+.keller a:focus-visible,
+.keller input:focus-visible {
+  outline: 2px solid var(--k-accent);
+  outline-offset: 2px;
+}
+
+.keller__phase--visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .keller__phase {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

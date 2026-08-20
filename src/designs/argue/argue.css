@@ -1,0 +1,70 @@
+.argue {
+  --a-bg: #ffffff;
+  --a-ink: #000000;
+  --a-accent: #cc0000;
+  --a-muted: #666666;
+
+  font-family: 'Bebas Neue', sans-serif;
+  background: var(--a-bg);
+  color: var(--a-ink);
+  min-height: 100dvh;
+}
+
+.argue__section {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+}
+
+.argue__headline {
+  font-size: clamp(3rem, 12vw, 9rem);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+}
+
+.argue__body {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  max-width: 36ch;
+}
+
+.argue__stamp {
+  transition: transform 200ms ease-out;
+}
+
+.argue__stamp--hit {
+  transform: scale(1.08) rotate(-3deg);
+}
+
+.argue__agree-btn {
+  min-height: 44px;
+  min-width: 44px;
+  background: var(--a-ink);
+  color: var(--a-bg);
+  border: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  padding: 1rem 2rem;
+}
+
+.argue__agree-btn:focus-visible {
+  outline: 2px solid var(--a-accent);
+  outline-offset: 4px;
+}
+
+.argue__agree-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .argue__stamp {
+    transition: none;
+  }
+}

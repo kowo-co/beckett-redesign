@@ -1,0 +1,63 @@
+.tidal {
+  --t-bg: #0a1628;
+  --t-ink: #e8f0f0;
+  --t-muted: #8aa4a8;
+  --t-accent: #3d9a8b;
+  --t-surface: #122038;
+
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--t-bg);
+  color: var(--t-ink);
+  min-height: 100dvh;
+}
+
+.tidal__video-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.tidal__video-wrap video {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.tidal__region-btn {
+  min-height: 44px;
+  min-width: 44px;
+  border: 1px solid var(--t-muted);
+  background: transparent;
+  color: var(--t-ink);
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color 150ms, background 150ms;
+}
+
+.tidal__region-btn[aria-pressed='true'] {
+  border-color: var(--t-accent);
+  background: var(--t-surface);
+}
+
+.tidal__region-btn:focus-visible {
+  outline: 2px solid var(--t-accent);
+  outline-offset: 2px;
+}
+
+.tidal input[type='range'] {
+  accent-color: var(--t-accent);
+  min-height: 44px;
+}
+
+.tidal__result {
+  font-variant-numeric: tabular-nums;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tidal__video-wrap video {
+    display: none;
+  }
+
+  .tidal__video-fallback {
+    display: block !important;
+  }
+}

@@ -1,0 +1,56 @@
+.field {
+  --f-bg: #1a1814;
+  --f-ink: #e8e4dc;
+  --f-muted: #9a9488;
+  --f-accent: #c4a35a;
+
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--f-bg);
+  color: var(--f-ink);
+  min-height: 100dvh;
+}
+
+.field__canvas-wrap {
+  position: relative;
+  width: 100%;
+  height: 50dvh;
+  min-height: 280px;
+  background: var(--f-bg);
+}
+
+.field__canvas-wrap canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.field__fallback {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.field input[type='range'] {
+  accent-color: var(--f-accent);
+  min-height: 44px;
+  width: 100%;
+}
+
+.field button,
+.field a {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.field button:focus-visible,
+.field a:focus-visible,
+.field input:focus-visible {
+  outline: 2px solid var(--f-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .field__canvas-wrap canvas {
+    display: none;
+  }
+}

@@ -1,0 +1,95 @@
+.overprint {
+  --op-bg: #f0ece4;
+  --op-ink: #0d0d0d;
+  --op-red: #e63312;
+  --op-yellow: #f5c518;
+  --op-cyan: #00a8cc;
+
+  font-family: 'Bebas Neue', sans-serif;
+  background: var(--op-bg);
+  color: var(--op-ink);
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+.overprint__hero-text {
+  font-size: clamp(4rem, 18vw, 14rem);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  transform: rotate(-2deg);
+}
+
+.overprint__layer {
+  position: relative;
+}
+
+.overprint__float {
+  position: absolute;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.overprint__sans {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+}
+
+.overprint__grid {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr 0.8fr;
+  gap: 0;
+}
+
+.overprint__cell {
+  border: 3px solid var(--op-ink);
+  padding: 1rem;
+  min-height: 120px;
+}
+
+.overprint__cell--offset {
+  transform: translate(12px, -8px);
+  background: var(--op-yellow);
+  z-index: 2;
+}
+
+.overprint__cell--overlap {
+  margin-top: -2rem;
+  margin-left: -1rem;
+  background: var(--op-cyan);
+  z-index: 3;
+}
+
+.overprint button {
+  min-height: 44px;
+  min-width: 44px;
+  background: var(--op-red);
+  color: white;
+  border: 3px solid var(--op-ink);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transform: rotate(1.5deg);
+}
+
+.overprint button:focus-visible {
+  outline: 3px solid var(--op-ink);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .overprint__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .overprint__cell--offset,
+  .overprint__cell--overlap {
+    transform: none;
+    margin: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overprint__float {
+    display: none;
+  }
+}

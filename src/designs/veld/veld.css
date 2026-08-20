@@ -1,0 +1,42 @@
+.veld {
+  --v-bg: #f7f6f3;
+  --v-ink: #2a2a28;
+  --v-muted: #8a8880;
+  --v-accent: #6b7f5e;
+
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  background: var(--v-bg);
+  color: var(--v-ink);
+  min-height: 100dvh;
+}
+
+.veld h1 {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 300;
+  font-style: italic;
+  margin: 0;
+  line-height: 1;
+}
+
+.veld__sans {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--v-muted);
+}
+
+.veld img {
+  width: 100%;
+}
+
+.veld a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.veld a:focus-visible {
+  outline: 1px solid var(--v-accent);
+  outline-offset: 3px;
+}

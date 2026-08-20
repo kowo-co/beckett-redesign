@@ -1,7 +1,7 @@
 import { chromium } from 'playwright'
 
 const base = process.env.BASE_URL ?? 'http://127.0.0.1:4321'
-const routes = ['picker', '1', '2', '3', '4', '5']
+const routes = ['picker', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
 
 const browser = await chromium.launch()
 const page = await browser.newPage({ viewport: { width: 375, height: 812 } })

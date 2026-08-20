@@ -1,0 +1,69 @@
+.halt {
+  --h-bg: #ffffff;
+  --h-ink: #111111;
+  --h-muted: #888888;
+
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: var(--h-bg);
+  color: var(--h-ink);
+  min-height: 100dvh;
+}
+
+.halt__hero {
+  min-height: 85dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.halt h1 {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.halt p {
+  font-size: 0.9375rem;
+  font-weight: 300;
+  line-height: 1.7;
+  color: var(--h-muted);
+  max-width: 32ch;
+}
+
+.halt img {
+  filter: grayscale(1);
+}
+
+.halt a,
+.halt button {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.halt a:focus-visible,
+.halt button:focus-visible {
+  outline: 1px solid var(--h-ink);
+  outline-offset: 4px;
+}
+
+.halt__pause-btn {
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--h-ink);
+  cursor: pointer;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--h-ink);
+}
+
+.halt__pause-btn--active {
+  color: var(--h-muted);
+  border-bottom-color: var(--h-muted);
+}
