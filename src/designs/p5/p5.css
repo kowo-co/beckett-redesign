@@ -1,0 +1,352 @@
+/* /5 STEP — one line at a time. Signage nerve: near-black, off-white, mono
+   counters, a hairline that fills as you go. Nothing else moves. */
+
+.p5 {
+  --paper: #141414;
+  --ink: #f5f5f4;
+  --dim: rgba(245, 245, 244, 0.74);
+  --line: rgba(245, 245, 244, 0.14);
+
+  position: relative;
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+}
+
+.p5-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  padding: 32px 24px 20px;
+  isolation: isolate;
+}
+
+/* Letterboxed video band, hugging only the hero line: machinery directly
+   under the words, plain black everywhere else. */
+.p5-herowrap {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 140px;
+  padding: 20px 0;
+}
+
+/* The letterbox itself is masked to a soft-edged oval, never a hard
+   rectangle, so on the final step it dissolves into streak.jpg instead of
+   punching a JPEG-shaped box through it. */
+.p5-band {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  -webkit-mask-image: radial-gradient(ellipse 60% 68% at 50% 50%, #000 42%, transparent 100%);
+  mask-image: radial-gradient(ellipse 60% 68% at 50% 50%, #000 42%, transparent 100%);
+}
+
+.p5-reel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.p5-reel video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: grayscale(1) contrast(1.05) brightness(0.6);
+  opacity: 0.16;
+}
+
+.p5 .reel-play {
+  position: fixed;
+  left: 16px;
+  top: 16px;
+  z-index: 20;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 16px;
+  background: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  font: 500 10px/1 'IBM Plex Mono', ui-monospace, monospace;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.p5 .reel-play:hover {
+  color: var(--ink);
+  border-color: var(--ink);
+}
+
+/* Final-step atmosphere image. Absent until the last line, then present
+   under everything, dark enough that type still clears contrast. */
+.p5-streak {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  z-index: 0;
+  filter: grayscale(1) brightness(0.4) contrast(1.05);
+  transition: opacity 900ms ease;
+  pointer-events: none;
+}
+
+.p5-streak.is-on {
+  opacity: 0.42;
+}
+
+.p5-frame {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  max-width: 880px;
+  width: 100%;
+  text-align: center;
+}
+
+.p5-readout {
+  margin: 0;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.p5-line {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-weight: 500;
+  font-size: clamp(1.75rem, 6.5vw, 4.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.p5-fogg {
+  margin: 0;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+
+/* Controls: sit in normal flow at the bottom of the stage (not pinned
+   absolute) so they can never overlap the Fogg line at short viewport
+   heights. Back keeps its slot even when not shown, so nothing but the
+   middle line ever shifts. */
+.p5-controls {
+  position: relative;
+  flex: none;
+  width: 100%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px 24px 0;
+}
+
+.p5-back {
+  position: absolute;
+  left: 24px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 18px;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.p5-back:hover:not(:disabled) {
+  border-color: var(--ink);
+}
+
+.p5-back.is-hidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.p5-primary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.p5-next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-width: 176px;
+  min-height: 56px;
+  padding: 0 30px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.p5-next:hover {
+  background: #ffffff;
+}
+
+.p5-arrow {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+.p5-again {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 18px;
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.p5-again:hover {
+  border-color: var(--ink);
+}
+
+.p5-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 176px;
+  min-height: 56px;
+  padding: 0 30px;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.p5-cta:hover {
+  background: #ffffff;
+}
+
+/* Progress hairline, pinned to the very bottom edge. */
+.p5-hairline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: var(--line);
+  z-index: 3;
+}
+
+.p5-hairline-fill {
+  height: 100%;
+  background: var(--ink);
+  transition: width 420ms ease;
+}
+
+@media (max-width: 560px) {
+  .p5-herowrap {
+    min-height: 96px;
+    padding: 14px 0;
+  }
+
+  .p5-controls {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 20px 24px 0;
+  }
+
+  .p5-back {
+    position: static;
+    padding: 0 14px;
+  }
+
+  .p5-next,
+  .p5-cta {
+    min-width: 0;
+    padding: 0 20px;
+    font-size: 12px;
+  }
+
+  .p5-primary {
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .p5-frame {
+    gap: 14px;
+    max-width: 100%;
+  }
+}
+
+/* Short viewport heights (landscape phones): compact every gap so the
+   frame, controls and hairline all fit without the flex column being
+   forced to overlap or clip anything. */
+@media (max-height: 560px) {
+  .p5-stage {
+    padding: 16px 24px 12px;
+  }
+
+  .p5-herowrap {
+    min-height: 56px;
+    padding: 10px 0;
+  }
+
+  .p5-frame {
+    gap: 10px;
+  }
+
+  .p5-controls {
+    padding-top: 12px;
+    gap: 10px;
+  }
+
+  .p5-next,
+  .p5-cta,
+  .p5-again,
+  .p5-back {
+    min-height: 44px;
+  }
+}

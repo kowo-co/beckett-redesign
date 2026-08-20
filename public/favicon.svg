@@ -1,4 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" fill="#111"/>
-  <text x="16" y="22" text-anchor="middle" fill="#fff" font-family="monospace" font-size="14" font-weight="700">B</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" fill="#0b0b0c"/>
+  <rect x="6" y="6" width="4" height="20" fill="#ff4d17"/>
+  <rect x="13" y="6" width="13" height="4" fill="#f2f0ec"/>
+  <rect x="13" y="14" width="10" height="4" fill="#f2f0ec"/>
+  <rect x="13" y="22" width="13" height="4" fill="#f2f0ec"/>
 </svg>

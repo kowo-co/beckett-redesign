@@ -1,0 +1,626 @@
+/* /1 LEDGER — a till roll across the mouth of the printer. Two colours: ink and bone. */
+
+.p1 {
+  --ink: #16130f;
+  --bone: #f0e9da;
+  --bench: #08080a;
+
+  /* bone is the only thing on this page that clears 3:1 on the bench */
+  --focus: var(--bone);
+  --hb-bg: #16130f;
+  --hb-fg: #f0e9da;
+  --hb-line: #f0e9da;
+
+  /* the gutter the roll stands in, and the height of the machine behind it */
+  --gut: clamp(30px, 17vw, 64px);
+  --band: clamp(184px, 32vh, 320px);
+
+  /*
+   * Fibre. /a/1/paper.jpg carries none to harvest (its sheet measures a
+   * standard deviation of 1.1 on a mean of 242), so the grain is generated and
+   * the photograph is spent on the torn ends instead, where it has something
+   * to give.
+   */
+  --fibre: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.085'/%3E%3C/svg%3E");
+
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: var(--bench);
+  color: var(--bone);
+  font-family: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+  font-variant-ligatures: none;
+}
+
+/* ---- the bench -------------------------------------------------------- */
+
+.p1-bench {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background: var(--bench);
+  pointer-events: none;
+}
+
+/* the machine the roll is lying on: a legible photograph, not a smear */
+.p1-machine {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.p1-drum {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* the slot, its chrome edge, and the sheet coming out below it */
+  object-position: 62% 44%;
+  filter: grayscale(1) brightness(0.54) contrast(1.16);
+}
+
+/* light falls off to the corners, but the machine is never blacked out */
+.p1-pool {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      118% 62% at 50% 42%,
+      rgba(6, 6, 8, 0) 0%,
+      rgba(6, 6, 8, 0.34) 46%,
+      rgba(5, 5, 6, 0.82) 78%,
+      #050506 100%
+    );
+}
+
+/* ---- the roll --------------------------------------------------------- */
+
+.p1-feed {
+  position: relative;
+  z-index: 1;
+  padding: calc(var(--band) * 0.5) 0 clamp(72px, 14vh, 132px);
+  animation: p1-feed 620ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+@keyframes p1-feed {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+.p1-shade {
+  position: relative;
+  container-type: inline-size;
+  width: min(432px, 100vw - var(--gut));
+  margin: 0 auto;
+  transform: rotate(-0.25deg);
+  filter:
+    drop-shadow(0 2px 2px rgba(0, 0, 0, 0.6))
+    drop-shadow(0 18px 24px rgba(0, 0, 0, 0.72))
+    drop-shadow(0 58px 64px rgba(0, 0, 0, 0.62));
+}
+
+.p1-strip {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: var(--fibre), var(--bone);
+  color: var(--ink);
+  padding: 34px 18px 36px;
+
+  /* the roll keeps its character count: the type is a fraction of the paper */
+  font-size: min(12.5px, (100cqw - 36px) / 20.4);
+  line-height: 1.62;
+  letter-spacing: 0.01em;
+
+  /* the ends of the strip belong to .p1-tear, so the body stops short of them */
+  mask-image: linear-gradient(#000 0 0);
+  mask-size: 100% calc(100% - 36px);
+  mask-position: 0 18px;
+  mask-repeat: no-repeat;
+}
+
+/*
+ * The torn ends. /a/1/paper.jpg is a photographed sheet with a real deckle;
+ * used as a luminance mask it hands over that exact silhouette. The numbers
+ * below map the sheet in the source (x 301..733, y 469..1071 of 1024x1536)
+ * onto the width of the roll, stretched 2x vertically so the tear reads.
+ */
+.p1-tear {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 22px;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(22, 19, 15, 0.05) 0 1px,
+      rgba(22, 19, 15, 0) 1px 3px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(22, 19, 15, 0.2) 0%,
+      rgba(22, 19, 15, 0) 6%,
+      rgba(22, 19, 15, 0) 94%,
+      rgba(22, 19, 15, 0.2) 100%
+    ),
+    var(--fibre),
+    var(--bone);
+  mask-image: url('/a/1/paper.jpg');
+  mask-mode: luminance;
+  mask-size: 237.04% 3072px;
+  mask-repeat: no-repeat;
+  pointer-events: none;
+}
+
+.p1-tear-top {
+  top: 0;
+  mask-position: 50.84% -936px;
+}
+
+/* the same torn edge, turned over, so both ends of the roll came off one reel */
+.p1-tear-bot {
+  bottom: 0;
+  transform: scaleY(-1);
+  mask-position: 50.84% -936px;
+}
+
+/* if luminance masks are not on offer, bite the ends with two uneven combs */
+@supports not (mask-mode: luminance) {
+  .p1-tear {
+    mask-image:
+      radial-gradient(circle 7px at 50% 0, rgba(0, 0, 0, 0) 98%, #000 100%),
+      radial-gradient(circle 4.5px at 50% 0, rgba(0, 0, 0, 0) 97%, #000 100%);
+    mask-size: 15px 100%, 9px 100%;
+    mask-position: 0 0, 4px 0;
+    mask-repeat: repeat-x;
+    mask-composite: intersect, add;
+  }
+
+  .p1-tear-bot {
+    mask-image:
+      radial-gradient(circle 7px at 50% 100%, rgba(0, 0, 0, 0) 98%, #000 100%),
+      radial-gradient(circle 4.5px at 50% 100%, rgba(0, 0, 0, 0) 97%, #000 100%);
+  }
+}
+
+/* the line structure a thermal head leaves behind */
+.p1-thermal {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(22, 19, 15, 0.05) 0 1px,
+    rgba(22, 19, 15, 0) 1px 3px
+  );
+  pointer-events: none;
+}
+
+/* the roll still wants to curl at its edges */
+.p1-curl {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background:
+    linear-gradient(
+      90deg,
+      rgba(22, 19, 15, 0.2) 0%,
+      rgba(22, 19, 15, 0) 6%,
+      rgba(22, 19, 15, 0) 94%,
+      rgba(22, 19, 15, 0.2) 100%
+    ),
+    linear-gradient(
+      166deg,
+      rgba(22, 19, 15, 0) 0%,
+      rgba(22, 19, 15, 0) 34%,
+      rgba(22, 19, 15, 0.11) 100%
+    );
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.p1-body {
+  position: relative;
+  z-index: 2;
+}
+
+/* ---- printing --------------------------------------------------------- */
+
+.p1-print {
+  animation: p1-strike 190ms steps(6, end) both;
+}
+
+@keyframes p1-strike {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    /* negative inset so a focus ring is never clipped once the row has printed */
+    clip-path: inset(-12px -12px -12px -12px);
+  }
+}
+
+@keyframes p1-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ---- printed matter --------------------------------------------------- */
+
+.p1-rule {
+  margin: 14px 0;
+  background-repeat: no-repeat;
+}
+
+.p1-rule-double {
+  height: 6px;
+  background-image:
+    repeating-linear-gradient(90deg, var(--ink) 0 6px, rgba(0, 0, 0, 0) 6px 8.4px),
+    repeating-linear-gradient(90deg, var(--ink) 0 6px, rgba(0, 0, 0, 0) 6px 8.4px);
+  background-size: 100% 1.5px, 100% 1.5px;
+  background-position: 0 0, 0 100%;
+}
+
+.p1-rule-single {
+  height: 1.5px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--ink) 0 4px,
+    rgba(0, 0, 0, 0) 4px 8.4px
+  );
+  background-size: 100% 1.5px;
+  background-position: 0 50%;
+}
+
+.p1-h1 {
+  margin: 16px 0 18px;
+  font-size: min(6.6vw, 28px);
+  font-weight: 700;
+  line-height: 1.24;
+  letter-spacing: 0.005em;
+  text-align: center;
+  text-transform: uppercase;
+  /* a thermal head striking twice */
+  text-shadow: 0.5px 0.4px 0 rgba(22, 19, 15, 0.3);
+}
+
+.p1-h1 span {
+  display: block;
+}
+
+/* the picture is printed on the roll, so it gets a dot screen and no depth */
+.p1-window {
+  position: relative;
+  margin: 14px -18px;
+  background: var(--bone);
+}
+
+.p1-window::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: repeating-radial-gradient(
+    circle at 0 0,
+    var(--bone) 0 0.9px,
+    rgba(0, 0, 0, 0) 0.9px 3px
+  );
+  mix-blend-mode: screen;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.p1-reel {
+  display: block;
+  aspect-ratio: 12 / 5;
+  width: 100%;
+}
+
+.p1-reel video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 62%;
+  filter: grayscale(1) brightness(1.62) contrast(1.7);
+  mix-blend-mode: multiply;
+}
+
+.p1 [data-reel] {
+  position: relative;
+}
+
+.p1 .reel-play {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  background: var(--bone);
+  color: var(--ink);
+  border: 1px solid var(--ink);
+  font: 700 11px/1 'IBM Plex Mono', ui-monospace, monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  z-index: 2;
+}
+
+/* the two controls that sit on bone take the ink ring instead */
+.p1 .reel-play:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 2px;
+}
+
+/* ---- the line items --------------------------------------------------- */
+
+.p1-lines {
+  margin: 10px 0 12px;
+  padding: 0;
+  list-style: none;
+}
+
+/*
+ * The type is sized off the paper so a row always fits, but if a reader forces
+ * a minimum font size the value drops to its own line rather than being cut.
+ */
+.p1-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.p1-t,
+.p1-n,
+.p1-v {
+  white-space: nowrap;
+}
+
+.p1-t {
+  flex: 0 0 auto;
+  font-weight: 700;
+}
+
+.p1-n {
+  flex: 0 0 auto;
+  padding-left: 0.6em;
+}
+
+.p1-v {
+  flex: 0 0 auto;
+  margin-left: auto;
+  font-weight: 500;
+}
+
+.p1-lead {
+  flex: 1 1 auto;
+  align-self: stretch;
+  min-width: 1.2em;
+  margin: 0 0.5em;
+  background-image: radial-gradient(circle, currentColor 0.85px, rgba(0, 0, 0, 0) 1.05px);
+  background-size: 0.62em 0.62em;
+  background-position: 0 62%;
+  background-repeat: repeat-x;
+}
+
+/* ---- total ------------------------------------------------------------ */
+
+.p1-total {
+  position: relative;
+  margin: 16px 0 14px;
+}
+
+/*
+ * The stamp is unmasked on purpose: the source's paper-white surround is a
+ * no-op under multiply, so the only edge that survives is the ragged inked
+ * one. It is scaled past the roll and clipped by it, the way a stamp lands.
+ */
+.p1-stamp {
+  position: absolute;
+  z-index: -1;
+  right: -78px;
+  top: -84px;
+  width: 372px;
+  height: auto;
+  transform: rotate(-12deg);
+  /* lift first, then crush: the surround clips to white and drops out of the
+     multiply, the mottled interior opens up, the ragged rim goes to ink */
+  filter: grayscale(1) brightness(1.28) contrast(1.9) blur(0.5px);
+  mix-blend-mode: multiply;
+  /* held here so the darkest of the ragged rim still clears 4.5:1 under ink */
+  opacity: 0.38;
+  pointer-events: none;
+}
+
+.p1-big {
+  margin: 2px 0 8px;
+  font-size: min(11vw, 46px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  text-align: right;
+  text-shadow: 0.5px 0.4px 0 rgba(22, 19, 15, 0.3);
+}
+
+.p1-mid .p1-v {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* ---- footer of the roll ------------------------------------------------ */
+
+.p1-fogg {
+  margin: 12px 0 0;
+}
+
+.p1-record {
+  margin: 20px auto 24px;
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
+}
+
+.p1-barcode {
+  height: 58px;
+  margin: 0 auto 10px;
+  width: 84%;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--ink) 0 2px,
+    rgba(0, 0, 0, 0) 2px 5px,
+    var(--ink) 5px 6px,
+    rgba(0, 0, 0, 0) 6px 9px,
+    var(--ink) 9px 13px,
+    rgba(0, 0, 0, 0) 13px 15px,
+    var(--ink) 15px 16px,
+    rgba(0, 0, 0, 0) 16px 20px,
+    var(--ink) 20px 22px,
+    rgba(0, 0, 0, 0) 22px 23px,
+    var(--ink) 23px 27px,
+    rgba(0, 0, 0, 0) 27px 30px,
+    var(--ink) 30px 31px,
+    rgba(0, 0, 0, 0) 31px 33px,
+    var(--ink) 33px 36px,
+    rgba(0, 0, 0, 0) 36px 40px,
+    var(--ink) 40px 41px,
+    rgba(0, 0, 0, 0) 41px 44px,
+    var(--ink) 44px 47px,
+    rgba(0, 0, 0, 0) 47px 49px
+  );
+}
+
+.p1-cut {
+  position: relative;
+  height: 1px;
+  margin: 22px 0 20px;
+  animation-name: p1-fade;
+  border-top: 1px dashed rgba(22, 19, 15, 0.8);
+  color: var(--ink);
+}
+
+.p1-cut svg {
+  position: absolute;
+  left: 9%;
+  top: -12px;
+  display: block;
+  padding: 0 6px;
+  background: var(--bone);
+}
+
+.p1-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  margin-top: 6px;
+  background: var(--ink);
+  color: var(--bone);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.p1-cta:hover {
+  background: var(--bone);
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px var(--ink);
+}
+
+.p1-cta:focus-visible {
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+.p1 .homebar:focus-visible {
+  outline: 3px solid var(--bone);
+  outline-offset: 3px;
+}
+
+/* ---- narrow bench ------------------------------------------------------ */
+
+/*
+ * Once the roll is nearly the full width there is no bench left to see, so the
+ * machine moves to a band across the top and the roll comes out of it.
+ */
+@media (max-width: 699px) {
+  .p1 {
+    --band: clamp(210px, 36vh, 320px);
+  }
+
+  .p1-machine {
+    inset: 0 0 auto;
+    height: var(--band);
+    mask-image: linear-gradient(
+      180deg,
+      #000 0 62%,
+      rgba(0, 0, 0, 0.45) 84%,
+      rgba(0, 0, 0, 0) 100%
+    );
+  }
+
+  /*
+   * Pushed in until the band holds one thing: the slot, its chrome edge, and
+   * the sheet breaking out of it right where the roll starts.
+   */
+  .p1-drum {
+    top: -62%;
+    bottom: auto;
+    height: 167%;
+    object-position: 50% 50%;
+    filter: grayscale(1) brightness(0.82) contrast(1.14);
+  }
+
+  .p1-pool {
+    background: radial-gradient(
+      148% 30% at 50% 6%,
+      rgba(6, 6, 8, 0) 0%,
+      rgba(6, 6, 8, 0.4) 52%,
+      rgba(5, 5, 6, 0.9) 84%,
+      #050506 100%
+    );
+  }
+
+  .p1-feed {
+    padding-top: calc(var(--band) * 0.62);
+  }
+
+  .p1-stamp {
+    right: -66px;
+    top: -54px;
+    width: 336px;
+  }
+}
+
+/* ---- wider bench ------------------------------------------------------- */
+
+@media (min-width: 700px) {
+  .p1-strip {
+    padding: 38px 22px 40px;
+  }
+
+  .p1-window {
+    margin: 16px -22px;
+  }
+}
+
+/* ---- stillness --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .p1-feed,
+  .p1-print {
+    animation: none;
+    clip-path: none;
+    opacity: 1;
+  }
+}

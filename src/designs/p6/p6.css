@@ -1,0 +1,496 @@
+/* FIELD /6 ---------------------------------------------------------------
+   A shader is the page. Everything else is a hard edge laid on top of it:
+   one mass of type on difference blend, one ink column on screen blend, one
+   opaque slab of mono that refuses to line up with either.
+   ------------------------------------------------------------------------ */
+
+.p6 {
+  --ink: #05030f;
+  --cyan: #6ff4ff;
+  --violet: #b39bff;
+  --paper: #f4f2ff;
+  --focus: #6ff4ff;
+  --hb-bg: #05030f;
+  --hb-fg: #6ff4ff;
+  --hb-line: rgba(111, 244, 255, 0.45);
+
+  position: relative;
+  isolation: isolate;
+  min-height: 100dvh;
+  overflow-x: clip;
+  background: var(--ink);
+  color: var(--paper);
+}
+
+/* the shader ------------------------------------------------------------- */
+
+.p6-field {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: var(--ink);
+}
+
+.p6-field canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.p6-field-flat img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(1.3) contrast(1.15) brightness(0.8);
+}
+
+/* stage ------------------------------------------------------------------ */
+
+.p6-main {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: auto 1fr auto;
+  align-content: stretch;
+  min-height: 100dvh;
+  padding: clamp(20px, 5vh, 52px) clamp(16px, 3.5vw, 56px) clamp(24px, 6vh, 60px);
+  column-gap: clamp(12px, 1.5vw, 24px);
+  overflow: hidden;
+}
+
+/* a thin veil of ink raked across the field. The type carries its own dark
+   operand now (see .p6-band), so this is composition only and stays light
+   enough that the shader's filaments still read on the left. */
+.p6-main::before {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      rgba(0, 0, 0, 0.16) 0 1px,
+      rgba(0, 0, 0, 0) 1px 3px
+    ),
+    linear-gradient(0deg, rgba(3, 1, 10, 0.62) 0%, rgba(3, 1, 10, 0) 32%),
+    linear-gradient(
+      103deg,
+      rgba(3, 1, 10, 0.58) 0%,
+      rgba(3, 1, 10, 0.38) 34%,
+      rgba(3, 1, 10, 0.14) 58%,
+      rgba(3, 1, 10, 0.08) 74%,
+      rgba(3, 1, 10, 0) 92%
+    );
+}
+
+/* the ink column: video composited into the field, cut by the slab -------- */
+
+/* the screen blend and the mask live on the <video>, not on the column, so the
+   column never becomes a blending group. If it did, the Play control that
+   reduced motion hands over would be screened along with the footage and its
+   label would vanish into whatever the ink is doing behind it. */
+.p6-plume {
+  position: absolute;
+  top: -14vh;
+  left: 61%;
+  width: min(328px, 27vw);
+  height: 128vh;
+  overflow: hidden;
+}
+
+.p6-reel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.p6-reel video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.84) contrast(1.95) saturate(1.95) hue-rotate(28deg);
+  mix-blend-mode: screen;
+  -webkit-mask-image:
+    linear-gradient(180deg, transparent 0%, #000 26%, #000 68%, transparent 96%),
+    linear-gradient(90deg, transparent 0%, #000 22%, #000 74%, transparent 100%);
+  mask-image:
+    linear-gradient(180deg, transparent 0%, #000 26%, #000 68%, transparent 96%),
+    linear-gradient(90deg, transparent 0%, #000 22%, #000 74%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+.p6 .reel-play {
+  position: absolute;
+  z-index: 6;
+  top: 62%;
+  left: 38%;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  background: #eafcff;
+  color: #04020c;
+  font: 700 11px/1 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* the bloom, screen-blended so black drops out and it fuses with the field */
+
+.p6-shard {
+  position: absolute;
+  z-index: 1;
+  bottom: -11vh;
+  left: -7vw;
+  width: min(560px, 47vw);
+  height: auto;
+  aspect-ratio: 1 / 1;
+  transform: rotate(-13deg);
+  opacity: 0.92;
+  mix-blend-mode: screen;
+  filter: contrast(1.8) saturate(1.9) brightness(0.92);
+  -webkit-mask-image: radial-gradient(circle at 52% 48%, #000 60%, transparent 88%);
+  mask-image: radial-gradient(circle at 52% 48%, #000 60%, transparent 88%);
+  pointer-events: none;
+}
+
+/* hairlines -------------------------------------------------------------- */
+
+/* the hairlines ride above the bars so they read as registration marks cut
+   across the whole composition, not as stubs that stop at the type */
+.p6-rules {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  pointer-events: none;
+}
+
+.p6-rule {
+  position: absolute;
+  display: block;
+  background: var(--cyan);
+}
+
+.p6-rule-a {
+  top: 9%;
+  left: 0;
+  width: 58%;
+  height: 1px;
+  opacity: 0.6;
+}
+
+.p6-rule-b {
+  top: 0;
+  left: 46.5%;
+  width: 1px;
+  height: 100%;
+  opacity: 0.3;
+}
+
+.p6-tick {
+  position: absolute;
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-left: 1px solid var(--cyan);
+  border-top: 1px solid var(--cyan);
+  opacity: 0.75;
+}
+
+.p6-tick-a {
+  top: 9%;
+  left: 58%;
+}
+
+.p6-tick-b {
+  top: calc(9% - 8px);
+  left: 0;
+  transform: rotate(180deg);
+}
+
+/* the mass ---------------------------------------------------------------
+   Four bars of ink, one per line, each cut to the width of its own word and
+   thrown off the axis of the one above it. The type is punched through them
+   on difference blend: because each bar is a known dark operand, inversion
+   always lands near white, and the field and the plume still push colour up
+   through the 22% the bar leaves open. Without the bars the difference blend
+   sits on mid-luminance video and the letterforms dissolve into it.
+   ------------------------------------------------------------------------ */
+
+.p6-h1 {
+  position: relative;
+  z-index: 3;
+  grid-column: 1 / 13;
+  grid-row: 1;
+  min-width: 0;
+  margin: clamp(24px, 7vh, 72px) 0 0;
+  font-family: "Archivo Black", "Space Grotesk", system-ui, sans-serif;
+  font-size: clamp(3rem, 11.6vw, 9rem);
+  font-weight: 400;
+  line-height: 0.62;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.p6-band {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  padding: 0.14em 0.12em 0.16em 0.08em;
+  white-space: nowrap;
+  background: rgba(4, 2, 14, 0.79);
+  isolation: isolate;
+}
+
+.p6-ink {
+  display: block;
+  color: #ffffff;
+  text-shadow:
+    0.055em 0 rgba(0, 216, 255, 0.55),
+    -0.045em 0.018em rgba(255, 0, 132, 0.45);
+  mix-blend-mode: difference;
+}
+
+.p6-l1 {
+  margin-left: -1vw;
+}
+
+.p6-l2 {
+  margin-left: 30vw;
+}
+
+.p6-l3 {
+  margin-left: 8vw;
+}
+
+/* the last row is two separate bars sharing a line, so the word space becomes
+   a gap you can see straight through to the field */
+.p6-l4,
+.p6-l5 {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.p6-l4 {
+  margin-left: 0;
+}
+
+/* the slab: hard-edged, opaque, deliberately off the type's axis ---------- */
+
+.p6-slab {
+  position: relative;
+  z-index: 4;
+  grid-column: 7 / 13;
+  grid-row: 3;
+  align-self: end;
+  justify-self: start;
+  width: min(432px, 100%);
+  padding: 20px 24px 20px;
+  border: 1px solid rgba(111, 244, 255, 0.42);
+  background: rgba(3, 2, 12, 0.9);
+  -webkit-backdrop-filter: blur(7px) saturate(1.5);
+  backdrop-filter: blur(7px) saturate(1.5);
+}
+
+.p6-slab::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  width: 56px;
+  height: 4px;
+  background: var(--cyan);
+}
+
+.p6-body {
+  margin: 0;
+  font: 400 13px/1.65 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.005em;
+  color: #ddd9ff;
+}
+
+.p6-fogg {
+  margin: 16px 0 0;
+  padding-top: 12px;
+  border-top: 1px solid rgba(111, 244, 255, 0.28);
+  font: 500 10.5px/1.7 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+
+/* the one solid object on the page --------------------------------------- */
+
+.p6-cta {
+  position: relative;
+  z-index: 4;
+  grid-column: 1 / 6;
+  grid-row: 3;
+  align-self: end;
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 60px;
+  padding: 0 24px;
+  background: var(--cyan);
+  color: #04020c;
+  font: 700 13px/1 "IBM Plex Mono", ui-monospace, monospace;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+}
+
+.p6-cta:hover {
+  background: var(--paper);
+}
+
+/* the notched corner is a clip-path, and a clip-path would eat the focus ring,
+   so focus squares the block off and rings it properly */
+.p6-cta:focus-visible {
+  clip-path: none;
+  outline: 3px solid var(--paper);
+  outline-offset: 4px;
+  box-shadow: 0 0 0 3px #04020c;
+}
+
+/* phone: a different composition, not a squeezed one --------------------- */
+
+@media (max-width: 760px) {
+  .p6-main {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 1fr auto auto;
+    padding: 24px 16px 32px;
+    row-gap: 0;
+  }
+
+  .p6-main::before {
+    background:
+      linear-gradient(0deg, rgba(3, 1, 10, 0.6) 0%, rgba(3, 1, 10, 0) 30%),
+      linear-gradient(
+        180deg,
+        rgba(3, 1, 10, 0.84) 0%,
+        rgba(3, 1, 10, 0.5) 26%,
+        rgba(3, 1, 10, 0) 46%
+      );
+  }
+
+  .p6-h1 {
+    grid-column: 1;
+    grid-row: 1;
+    margin-top: 4px;
+    font-size: 14vw;
+    letter-spacing: -0.05em;
+    line-height: 0.6;
+  }
+
+  .p6-l1 {
+    margin-left: 0;
+  }
+
+  .p6-l2 {
+    margin-left: 46vw;
+  }
+
+  .p6-l3 {
+    margin-left: 13vw;
+  }
+
+  .p6-h1 .p6-l4,
+  .p6-h1 .p6-l5 {
+    display: block;
+  }
+
+  .p6-h1 .p6-l4 {
+    margin-left: 4px;
+  }
+
+  .p6-h1 .p6-l5 {
+    margin-left: 16vw;
+  }
+
+  .p6-plume {
+    top: 7vh;
+    left: auto;
+    right: -6vw;
+    width: 44vw;
+    height: 66vh;
+  }
+
+  .p6-reel video {
+    -webkit-mask-image:
+      linear-gradient(180deg, transparent 0%, #000 22%, #000 66%, transparent 98%),
+      linear-gradient(90deg, transparent 0%, #000 46%, #000 88%, transparent 100%);
+    mask-image:
+      linear-gradient(180deg, transparent 0%, #000 22%, #000 66%, transparent 98%),
+      linear-gradient(90deg, transparent 0%, #000 46%, #000 88%, transparent 100%);
+  }
+
+  .p6-shard {
+    bottom: auto;
+    top: 31vh;
+    left: -38vw;
+    width: 80vw;
+    opacity: 0.62;
+  }
+
+  .p6-rule-a {
+    top: 52vh;
+    width: 62%;
+  }
+
+  .p6-rule-b {
+    left: auto;
+    right: 22vw;
+    opacity: 0.22;
+  }
+
+  .p6-tick-a {
+    top: 52vh;
+    left: 62%;
+  }
+
+  .p6-tick-b {
+    top: calc(52vh - 8px);
+  }
+
+  .p6-slab {
+    grid-column: 1;
+    grid-row: 3;
+    width: calc(100% - 24px);
+    margin-left: 24px;
+    padding: 16px;
+  }
+
+  .p6-body {
+    font-size: 12.5px;
+  }
+
+  .p6-cta {
+    grid-column: 1;
+    grid-row: 4;
+    margin: 16px 0 56px;
+    min-height: 56px;
+    padding: 0 20px;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+  }
+
+  .p6 .reel-play {
+    top: 46%;
+    left: 26%;
+  }
+}
+
+/* reduced motion: the field renders one frame, nothing here moves --------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .p6-reel video {
+    filter: contrast(1.4) saturate(1.3) brightness(0.9) hue-rotate(28deg);
+  }
+}

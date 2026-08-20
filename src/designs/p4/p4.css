@@ -1,0 +1,204 @@
+/* /4 RULE — severe minimal. Warm paper, one hairline, serif only. */
+
+.p4 {
+  position: relative;
+  min-height: 100dvh;
+  overflow-x: clip;
+  background: #e9e5db;
+  color: #1b1a17;
+  font-family: 'Source Serif 4', Georgia, serif;
+  --line-y: clamp(120px, 20vh, 220px);
+  --side-pad: clamp(20px, 6vw, 72px);
+}
+
+.p4-paper {
+  position: fixed;
+  inset: 0;
+  background: url('/a/4/paper.jpg') center / cover no-repeat;
+  opacity: 0.15;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.p4-main {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  padding: 0 var(--side-pad);
+}
+
+/* The one hairline. Everything else is measured against it. */
+.p4-hairline {
+  position: absolute;
+  top: var(--line-y);
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
+  height: 1px;
+  background: #1b1a17;
+  z-index: 2;
+}
+
+.p4-hero {
+  position: relative;
+  z-index: 1;
+  min-height: var(--line-y);
+  max-width: 620px;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 22px;
+}
+
+.p4-hero h1 {
+  margin: 0;
+  font-family: 'Playfair Display', 'Source Serif 4', serif;
+  font-weight: 600;
+  font-size: clamp(2.25rem, 7vw, 5.5rem);
+  line-height: 1.03;
+  letter-spacing: -0.01em;
+}
+
+@media (min-width: 900px) {
+  .p4 {
+    --line-y: max(48vh, 27rem);
+  }
+
+  .p4-hero {
+    width: 33%;
+    min-width: 500px;
+  }
+}
+
+/* Small landscape video, flush to the hairline on the right. */
+.p4-reel {
+  z-index: 1;
+  width: min(300px, 100%);
+  margin: 18px 0 0;
+}
+
+.p4-reel[data-reel] {
+  position: relative;
+  display: block;
+  background: #e9e5db;
+}
+
+.p4-reel video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 960 / 542;
+  object-fit: cover;
+  mix-blend-mode: multiply;
+  filter: grayscale(1) contrast(1.08) sepia(0.12);
+  border-bottom: 1px solid #1b1a17;
+}
+
+@media (min-width: 900px) {
+  .p4-reel[data-reel] {
+    position: absolute;
+    top: var(--line-y);
+    right: var(--side-pad);
+    margin: 0;
+    z-index: 2;
+  }
+}
+
+.p4 .reel-play {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 14px;
+  background: #e9e5db;
+  color: #1b1a17;
+  border: 1px solid #1b1a17;
+  font: 500 11px/1 'Source Serif 4', Georgia, serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.p4 .reel-play:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Body copy, dropped well below the hairline. */
+.p4-body {
+  position: relative;
+  z-index: 1;
+  margin-top: 56px;
+  max-width: 34ch;
+}
+
+.p4-copy {
+  margin: 0 0 22px;
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.p4-fogg {
+  margin: 0 0 26px;
+  font-size: 13px;
+  line-height: 1.5;
+  font-style: italic;
+  color: #1b1a17;
+}
+
+@media (max-width: 899px) {
+  .p4-body {
+    margin-top: 40px;
+    padding-bottom: 72px;
+  }
+}
+
+.p4-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 4px 2px 12px;
+  font-family: 'Playfair Display', 'Source Serif 4', serif;
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  color: #1b1a17;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.p4-cta:hover {
+  border-bottom-width: 2px;
+}
+
+.p4-cta:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 4px;
+}
+
+/* A second, literal line: the full-bleed band that reads as a rule.
+   The wrapper carries the page's own paper tone so the image's multiply
+   blend has something to sink into, instead of blending with nothing. */
+.p4-line-wrap {
+  display: block;
+  width: 100vw;
+  max-width: none;
+  margin: 72px 0 0 calc(50% - 50vw);
+  height: 90px;
+  overflow: hidden;
+  background: #e9e5db;
+}
+
+.p4-line {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 55%;
+  mix-blend-mode: multiply;
+  filter: grayscale(1) contrast(1.15);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p4-line-wrap {
+    margin-top: 56px;
+  }
+}
