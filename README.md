@@ -1,32 +1,32 @@
-# React + TypeScript + Vite
+# Beckett Redesign Gallery
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Five radical landing-page redesigns of [0xbeckett.me](https://0xbeckett.me), served at **https://redesign.0xbeckett.me**.
 
-Currently, two official plugins are available:
+## Routes
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+| Route | Design | Idea |
+|-------|--------|------|
+| `/picker` | Gallery index | Live iframe previews of all five |
+| `/1` | Broadsheet | Newspaper broadsheet — oversized serif type as the grid |
+| `/2` | Receipt | Brutalist system-ui form with harsh 1px borders |
+| `/3` | Shell Session | Terminal man-page with phosphor-green text |
+| `/4` | Filmstrip | Vertical scroll drives horizontal pan through frames |
+| `/5` | Constellation | Generative particle field responding to cursor |
 
-## React Compiler
+## Develop
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Build & serve
+
+```bash
+npm run build
+npm run serve   # SPA on 127.0.0.1:4321
+```
+
+## Screenshots
+
+See `screenshots/` for full-page captures of all six routes.

@@ -62,7 +62,6 @@
   padding: 1.5rem;
   background: var(--cnv-zone);
   border: 1px solid var(--cnv-border);
-  backdrop-filter: blur(8px);
 }
 
 .cnv-title {
@@ -270,8 +269,3 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .cnv-zone {
-    backdrop-filter: none;
-  }
-}
