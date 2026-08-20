@@ -25,16 +25,22 @@ export function Design4Filmstrip() {
     if (!container || !track) return
 
     const onScroll = () => {
-      const scrollHeight = container.scrollHeight - container.clientHeight
-      if (scrollHeight <= 0) return
-      const progress = container.scrollTop / scrollHeight
+      const scrollRange = container.offsetHeight - window.innerHeight
+      if (scrollRange <= 0) return
+
+      const scrolled = -container.getBoundingClientRect().top
+      const progress = Math.min(1, Math.max(0, scrolled / scrollRange))
       const maxTranslate = track.scrollWidth - window.innerWidth
       track.style.transform = `translateX(-${progress * maxTranslate}px)`
     }
 
-    container.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
     onScroll()
-    return () => container.removeEventListener('scroll', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
   }, [reduced])
 
   return (

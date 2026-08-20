@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
-    "serve": "serve -s dist -l 4321"
+    "serve": "serve -s dist -l 4321 --no-port-switching"
   },
   "dependencies": {
     "clsx": "^2.1.1",
