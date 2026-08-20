@@ -1,0 +1,894 @@
+/* OVERPRINT /7 -- cream newsprint, four inks, every pass off by 3 to 6px.
+   Colour rule: fluoro pink, blue, yellow, black. Nothing else, ever.
+   Every second ink pass is a pseudo element carrying attr(data-ink), so the
+   misregistration is duplicated artwork, not duplicated copy. */
+
+.p7 {
+  --paper: #efe7d2;
+  --pink: #ff2d78;
+  --blue: #1b3cff;
+  --yellow: #ffd400;
+  --black: #141008;
+
+  --sx: 0px;
+  --sy: 0px;
+
+  --focus: #1b3cff;
+  /* Yellow, not pink: the way out must never sit pink-on-pink against the
+     sticker or the taped cut scrap. */
+  --hb-bg: #ffd400;
+  --hb-fg: #141008;
+  --hb-line: #141008;
+
+  position: relative;
+  overflow-x: clip;
+  min-height: 100dvh;
+  padding: 1px 0 0;
+  background: var(--paper);
+  color: var(--black);
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+}
+
+/* The way out is the one chip on the sheet that is not collage: yellow, hard
+   black offset, never the pink of the sticker or the scraps. */
+.p7 .homebar {
+  box-shadow: 4px 4px 0 var(--black);
+}
+
+/* ---- press overlays ---------------------------------------------------- */
+
+/* The dot screen sitting over the whole sheet. */
+.p7-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.44;
+  background-image: repeating-radial-gradient(
+    circle at 0.9px 0.9px,
+    rgba(20, 16, 8, 0.34) 0 0.7px,
+    rgba(20, 16, 8, 0) 0.75px 3px
+  );
+  background-size: 3px 3px;
+}
+
+/* Newsprint tooth. */
+.p7-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 41;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.26;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
+}
+
+/* ---- ticker ------------------------------------------------------------ */
+
+.p7-tick {
+  position: relative;
+  z-index: 12;
+  width: 124%;
+  margin-left: -12%;
+  padding: 7px 0 9px;
+  overflow: hidden;
+  mix-blend-mode: multiply;
+}
+
+.p7-tick-pink {
+  margin-top: 22px;
+  background: var(--pink);
+  transform: rotate(-2.3deg);
+}
+
+.p7-tick-blue {
+  margin-top: 40px;
+  background: var(--blue);
+  color: var(--paper);
+  transform: rotate(1.7deg);
+}
+
+.p7-track {
+  display: flex;
+  width: max-content;
+  animation: p7-run 26s linear infinite;
+}
+
+.p7-tick-rev .p7-track {
+  animation-name: p7-run-rev;
+  animation-duration: 34s;
+}
+
+@keyframes p7-run {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes p7-run-rev {
+  from { transform: translate3d(-50%, 0, 0); }
+  to { transform: translate3d(0, 0, 0); }
+}
+
+.p7-strip {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding-right: 22px;
+  white-space: nowrap;
+}
+
+.p7-mword {
+  position: relative;
+  display: inline-block;
+  font-family: 'Archivo Black', 'Space Grotesk', sans-serif;
+  font-size: 21px;
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+}
+
+/* Second pass, off register. The `/ ""` is load bearing: without the empty
+   alternative text the ink pass joins the accessible name and every ghost is
+   read aloud as another copy of the line. */
+.p7-mword::before {
+  content: attr(data-ink) / "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  transform: translate(calc(4px + var(--sx)), calc(-3px + var(--sy)));
+  color: var(--yellow);
+  mix-blend-mode: multiply;
+}
+
+.p7-tick-blue .p7-mword::before {
+  color: var(--pink);
+  transform: translate(calc(-4px + var(--sx)), calc(3px + var(--sy)));
+}
+
+.p7-star {
+  font-size: 15px;
+  opacity: 0.75;
+}
+
+/* ---- sheet ------------------------------------------------------------- */
+
+.p7-sheet {
+  position: relative;
+  z-index: 10;
+  padding: 0 16px;
+}
+
+/* ---- the hand, bleeding off the left edge ------------------------------ */
+
+.p7-hand {
+  position: absolute;
+  z-index: 2;
+  top: 296px;
+  left: -30vw;
+  width: 86vw;
+  transform: rotate(-14deg);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  clip-path: polygon(
+    4% 3%, 13% 5%, 24% 2%, 33% 5%, 44% 2%, 55% 5%,
+    66% 2%, 77% 5%, 87% 2%, 97% 5%,
+    95% 14%, 98% 24%, 95% 34%, 98% 44%, 95% 54%,
+    98% 64%, 95% 74%, 98% 84%, 95% 95%,
+    85% 98%, 74% 95%, 63% 98%, 52% 95%, 41% 98%, 30% 95%, 18% 98%, 5% 96%,
+    3% 85%, 6% 75%, 3% 64%, 6% 54%, 3% 44%, 6% 34%, 3% 23%, 6% 13%
+  );
+}
+
+.p7-hand img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.p7-hand-key {
+  filter: saturate(1.5) contrast(1.85) brightness(0.96) hue-rotate(-6deg);
+}
+
+/* The black plate, printed a second time and off register: the image is
+   bleached to white paper plus a solid shape, screened over blue ink. */
+.p7-hand-off {
+  position: absolute;
+  inset: 0;
+  background: var(--blue);
+  transform: translate(calc(13px + var(--sx)), calc(-10px + var(--sy)));
+  mix-blend-mode: multiply;
+}
+
+.p7-hand-off img {
+  filter: grayscale(1) brightness(1.95) contrast(1.6);
+  mix-blend-mode: screen;
+  animation: p7-slip 13s -5s ease-in-out infinite alternate;
+}
+
+/* ---- headline ---------------------------------------------------------- */
+
+.p7-hero {
+  position: relative;
+  z-index: 20;
+  padding: 30px 40px 0 0;
+}
+
+.p7-h1 {
+  position: relative;
+  margin: 0;
+  font-family: 'Archivo Black', 'Space Grotesk', sans-serif;
+  font-weight: 400;
+  font-size: clamp(3.2rem, 16.2vw, 9.5rem);
+  line-height: 0.82;
+  letter-spacing: -0.035em;
+  text-transform: uppercase;
+  word-spacing: -0.2em;
+}
+
+.p7-l {
+  position: relative;
+  display: block;
+  width: fit-content;
+  color: var(--black);
+}
+
+/* Ink passes only. Empty alternative text keeps the h1's accessible name at
+   "Ask. Merged. Ask again." instead of tripling it. */
+.p7-l::before,
+.p7-l::after {
+  content: attr(data-ink) / "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  top: 0;
+  mix-blend-mode: multiply;
+  white-space: nowrap;
+}
+
+.p7-l::before {
+  color: var(--pink);
+  transform: translate(calc(-6px + var(--sx)), calc(5px + var(--sy)));
+  animation: p7-slip 9s ease-in-out infinite alternate;
+}
+
+.p7-l::after {
+  color: var(--blue);
+  transform: translate(calc(5px - var(--sx)), calc(-4px - var(--sy)));
+  animation: p7-slip 11s -3s ease-in-out infinite alternate-reverse;
+}
+
+/* The sheet creeping under the drum: a two pixel drift, nothing more. */
+@keyframes p7-slip {
+  from { translate: 0 0; }
+  to { translate: 2px -2px; }
+}
+
+.p7-l2 {
+  margin-left: 0.14em;
+}
+
+.p7-l3 {
+  margin-left: 0.34em;
+}
+
+/* The one word turned on its side. */
+.p7-vert {
+  position: absolute;
+  z-index: 3;
+  top: 150px;
+  right: -46px;
+  writing-mode: vertical-rl;
+  font-size: clamp(2.4rem, 12.6vw, 4.6rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--blue);
+  mix-blend-mode: multiply;
+}
+
+.p7-vert::before {
+  content: attr(data-ink) / "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  transform: translate(calc(5px + var(--sx)), calc(4px + var(--sy)));
+  color: var(--pink);
+  mix-blend-mode: multiply;
+}
+
+/* ---- taped scraps ------------------------------------------------------ */
+
+/* The scrap itself is never clipped. Its ragged tear lives on .p7-scrap-in, so
+   the tape that overhangs the torn edge survives. */
+.p7-scrap {
+  position: relative;
+  mix-blend-mode: multiply;
+}
+
+.p7-scrap-in {
+  position: absolute;
+  display: block;
+  inset: 0;
+  /* The scaled crop inside would otherwise push the document taller: clip-path
+     hides the paint but not the overflow. */
+  overflow: hidden;
+}
+
+.p7-scrap img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The second drum pass on a scrap: same crop, one ink, a few pixels out. */
+.p7-scrap-pass {
+  position: absolute;
+  inset: 0;
+  display: block;
+  transform: translate(calc(-6px + var(--sx)), calc(5px + var(--sy)));
+  mix-blend-mode: multiply;
+}
+
+/* tape */
+.p7-scrap::before,
+.p7-scrap::after {
+  content: '';
+  position: absolute;
+  z-index: 3;
+  width: 62px;
+  height: 21px;
+  background: rgba(255, 212, 0, 0.66);
+  box-shadow: inset 0 0 0 1px rgba(20, 16, 8, 0.16);
+  mix-blend-mode: multiply;
+}
+
+.p7-scrap::before {
+  top: -9px;
+  left: 8%;
+  transform: rotate(-7deg);
+}
+
+.p7-scrap::after {
+  bottom: -8px;
+  right: 6%;
+  transform: rotate(5deg);
+}
+
+.p7-scrap-riso {
+  z-index: 22;
+  width: 44vw;
+  max-width: 236px;
+  aspect-ratio: 1024 / 1536;
+  margin: 6px 40px 0 auto;
+  transform: rotate(9deg);
+}
+
+.p7-scrap-riso .p7-scrap-in {
+  /* The source ships an orange field that is not one of the four inks, so the
+     scrap is separated by hand instead: everything prints as a pink plate, and
+     only the darkest mass comes back as a blue plate on top of it. */
+  background: var(--pink);
+  clip-path: polygon(
+    6% 2%, 27% 8%, 51% 0%, 77% 6%, 97% 1%,
+    91% 25%, 100% 47%, 92% 71%, 99% 91%,
+    75% 100%, 49% 93%, 23% 100%, 3% 94%,
+    9% 73%, 0% 50%, 8% 24%
+  );
+}
+
+/* Hard into the ragged tongue where the dark mass tears across the field. */
+.p7-scrap-riso img {
+  transform: scale(1.72);
+  transform-origin: 24% 22%;
+  filter: grayscale(1) contrast(1.4) brightness(1.1);
+  mix-blend-mode: screen;
+}
+
+/* The blue pass. The threshold is set so only the dark mass survives, so the
+   blob prints twice, pink then blue, six pixels out of register. */
+.p7-scrap-riso .p7-scrap-pass {
+  background: var(--blue);
+}
+
+.p7-scrap-riso .p7-scrap-pass img {
+  filter: grayscale(1) brightness(1.35) contrast(3);
+}
+
+/* Taped over the blue ticker and running off the bottom trim, so the last
+   screen is still collage rather than a footer. */
+.p7-scrap-cut {
+  position: absolute;
+  z-index: 21;
+  right: -26px;
+  bottom: -4px;
+  width: 49vw;
+  height: 348px;
+  transform: rotate(7deg);
+}
+
+/* No plate colour underneath. Bare newsprint is the ground, so the scrap
+   carries paper as well as ink and reads as a torn piece of a printed sheet
+   rather than a swatch. Tried blue and pink grounds here: both flattened the
+   plate structure to a slab. */
+.p7-scrap-cut .p7-scrap-in {
+  clip-path: polygon(
+    4% 3%, 31% 0%, 58% 6%, 85% 1%, 99% 5%,
+    92% 27%, 100% 51%, 91% 75%, 98% 96%,
+    71% 100%, 43% 93%, 17% 100%, 2% 95%,
+    9% 71%, 0% 48%, 7% 25%
+  );
+}
+
+/* Aimed at the black plate mass in the middle of the sheet, and kept left of
+   the hand lettering at 73%. The old crop landed on the flat orange field and
+   printed a blank rectangle. */
+/* Black plate over pink: the source is black plates on an orange field, so it
+   is reprinted with the orange swapped for one of our four inks. */
+.p7-scrap-cut img {
+  transform: scale(1.3);
+  transform-origin: 12% 40%;
+  filter: grayscale(1) contrast(1.62) brightness(1.32);
+  mix-blend-mode: multiply;
+}
+
+/* The pink pass, nine pixels out. It only shows where the two passes disagree,
+   which is a pink fringe down the edge of every plate. */
+.p7-scrap-cut .p7-scrap-pass {
+  background: var(--pink);
+  transform: translate(calc(9px + var(--sx)), calc(-8px + var(--sy)));
+}
+
+.p7-scrap-cut .p7-scrap-pass img {
+  filter: grayscale(1) brightness(1.04) contrast(1.5);
+  mix-blend-mode: screen;
+}
+
+/* ---- press furniture: registration marks and the ink bar --------------- */
+
+.p7-reg {
+  position: absolute;
+  z-index: 26;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px currentColor;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.p7-reg::before,
+.p7-reg::after {
+  content: '';
+  position: absolute;
+  background: currentColor;
+}
+
+.p7-reg::before {
+  left: 50%;
+  top: -12px;
+  width: 1px;
+  height: calc(100% + 24px);
+  transform: translateX(-0.5px);
+}
+
+.p7-reg::after {
+  top: 50%;
+  left: -12px;
+  height: 1px;
+  width: calc(100% + 24px);
+  transform: translateY(-0.5px);
+}
+
+.p7-reg-a {
+  right: 22px;
+  top: -14px;
+  color: var(--black);
+}
+
+.p7-reg-b {
+  left: 52%;
+  bottom: 152px;
+  width: 60px;
+  height: 60px;
+  color: var(--pink);
+}
+
+/* The colour control strip a press sheet carries at the trim. Full bleed, dead
+   straight, the one square thing on a crooked page: it is what the sheet is
+   trimmed against. */
+.p7-inks {
+  position: absolute;
+  z-index: 26;
+  left: -12px;
+  bottom: 0;
+  width: calc(100% + 24px);
+  height: 26px;
+  mix-blend-mode: multiply;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--pink) 0 34px,
+    var(--blue) 34px 68px,
+    var(--yellow) 68px 102px,
+    var(--black) 102px 136px
+  );
+}
+
+/* ---- the video, taped in a paper frame --------------------------------- */
+
+.p7-plate {
+  position: relative;
+  z-index: 24;
+  margin: 42px -10px 0 -6px;
+  padding: 11px 11px 32px;
+  background: #f5eed9;
+  box-shadow: 0 0 0 1px rgba(20, 16, 8, 0.55), 7px 9px 0 rgba(20, 16, 8, 0.13);
+  transform: rotate(-3.4deg);
+}
+
+.p7-plate::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 46%;
+  width: 84px;
+  height: 24px;
+  background: rgba(255, 212, 0, 0.6);
+  box-shadow: inset 0 0 0 1px rgba(20, 16, 8, 0.16);
+  transform: rotate(-4deg);
+  mix-blend-mode: multiply;
+}
+
+.p7-plate::after {
+  content: '';
+  position: absolute;
+  bottom: -11px;
+  left: 22px;
+  width: 74px;
+  height: 22px;
+  background: rgba(255, 212, 0, 0.58);
+  box-shadow: inset 0 0 0 1px rgba(20, 16, 8, 0.16);
+  transform: rotate(6deg);
+  mix-blend-mode: multiply;
+}
+
+/* The footage goes through the press with everything else: reduced to tone and
+   run as a pink plate, so no brown paper stock or grey machine housing sneaks a
+   fifth ink onto the sheet. */
+.p7-reel {
+  position: relative;
+  display: block;
+  aspect-ratio: 960 / 542;
+  background: var(--pink);
+  mix-blend-mode: multiply;
+}
+
+.p7-reel video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) brightness(1.26) contrast(1.24);
+  mix-blend-mode: multiply;
+}
+
+.p7 .reel-play {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--black);
+  background: var(--yellow);
+  color: var(--black);
+  font: 700 12px/1 'IBM Plex Mono', ui-monospace, monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* ---- sticker ----------------------------------------------------------- */
+
+/* Bottom left on a phone, so the fixed Index chip in the bottom right corner
+   never lands on the words. */
+.p7-sticker {
+  position: absolute;
+  z-index: 27;
+  left: -12px;
+  bottom: -34px;
+  margin: 0;
+  padding: 10px 14px 11px;
+  max-width: 68%;
+  background: var(--pink);
+  color: var(--black);
+  font-family: 'Archivo Black', 'Space Grotesk', sans-serif;
+  font-size: 17px;
+  line-height: 1.06;
+  letter-spacing: -0.015em;
+  transform: rotate(6.5deg);
+  /* Small type does not get a second text pass, it gets a second plate: the
+     block prints twice, off register, and the words stay readable. */
+  box-shadow:
+    inset 0 0 0 1px rgba(20, 16, 8, 0.5),
+    calc(-5px + var(--sx)) calc(5px + var(--sy)) 0 var(--blue);
+  mix-blend-mode: multiply;
+}
+
+/* ---- body block -------------------------------------------------------- */
+
+/* Above the plate and the scraps: the collage may crash into this block, never
+   over it. */
+.p7-body {
+  position: relative;
+  z-index: 25;
+  max-width: 31ch;
+  margin: 34px -10px 0 auto;
+  padding: 16px 15px 18px;
+  background: var(--yellow);
+  box-shadow: 0 0 0 1px var(--black), 6px 6px 0 rgba(27, 60, 255, 0.85);
+  font-size: 13px;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+  transform: rotate(1.4deg);
+}
+
+/* ---- foot -------------------------------------------------------------- */
+
+/* Bottom band. The CTA runs off the left trim and up into the blue ticker, the
+   small print sits under it at an angle, and the press furniture fills the rest
+   of the sheet down to the trim. No caption-left, button-right row. */
+.p7-foot {
+  position: relative;
+  z-index: 25;
+  min-height: 250px;
+  margin-top: -14px;
+}
+
+.p7-fogg {
+  position: absolute;
+  left: 6px;
+  top: 108px;
+  max-width: 27ch;
+  margin: 0;
+  padding-top: 9px;
+  border-top: 3px solid var(--black);
+  font-size: 11px;
+  line-height: 1.5;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transform: rotate(1.4deg);
+}
+
+.p7-cta {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 78px;
+  margin-left: -26px;
+  padding: 0 24px 0 34px;
+  background: var(--black);
+  color: var(--paper);
+  font-family: 'Archivo Black', 'Space Grotesk', sans-serif;
+  font-size: clamp(1.6rem, 8.4vw, 2.3rem);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transform: rotate(-2.6deg);
+}
+
+.p7-cta::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: var(--pink);
+  transform: translate(calc(7px + var(--sx)), calc(6px + var(--sy)));
+  mix-blend-mode: multiply;
+}
+
+.p7-cta:hover {
+  background: var(--blue);
+}
+
+.p7-cta:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 4px;
+}
+
+/* ---- wide -------------------------------------------------------------- */
+
+@media (min-width: 760px) {
+  .p7-sheet {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    padding: 0 32px;
+  }
+
+  .p7-tick-pink {
+    margin-top: 26px;
+    padding: 10px 0 12px;
+  }
+
+  .p7-tick-blue {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    width: 126%;
+    margin: 30px 0 0 -13%;
+    padding: 9px 0 11px;
+  }
+
+  .p7-mword {
+    font-size: clamp(22px, 2.5vw, 34px);
+  }
+
+  .p7-star {
+    font-size: 20px;
+  }
+
+  .p7-hand {
+    top: 452px;
+    left: -13vw;
+    width: 37vw;
+    max-width: 520px;
+    transform: rotate(-16deg);
+  }
+
+  .p7-hero {
+    grid-column: 1 / 10;
+    grid-row: 1;
+    padding: 42px 0 0 1.5vw;
+  }
+
+  .p7-h1 {
+    position: static;
+    font-size: clamp(4.6rem, 12.4vw, 11rem);
+  }
+
+  .p7-l2 {
+    margin-left: 0.3em;
+  }
+
+  .p7-l3 {
+    margin-left: 0.08em;
+  }
+
+  /* Hangs off the right edge of the sheet: the hero column ends at 75% of the
+     page, so this reaches back out to the trim. */
+  .p7-vert {
+    top: 96px;
+    right: calc(-25vw - 6px);
+    font-size: clamp(3.4rem, 8vw, 7rem);
+  }
+
+  .p7-scrap-riso {
+    grid-column: 9 / 12;
+    grid-row: 1;
+    width: auto;
+    max-width: none;
+    height: 372px;
+    aspect-ratio: auto;
+    margin: 74px 46px 0 0;
+    transform: rotate(8deg);
+    align-self: start;
+  }
+
+  .p7-plate {
+    grid-column: 4 / 9;
+    grid-row: 2;
+    margin: 24px 0 0 0;
+    padding: 13px 13px 38px;
+  }
+
+  .p7-scrap-cut {
+    right: -18px;
+    bottom: -6px;
+    width: clamp(190px, 19.8vw, 258px);
+    height: clamp(430px, 40vw, 512px);
+    transform: rotate(7deg);
+  }
+
+  .p7-body {
+    grid-column: 9 / 13;
+    grid-row: 2;
+    align-self: start;
+    max-width: none;
+    margin: 122px -34px 0 12px;
+    padding: 20px 20px 22px;
+    font-size: 14px;
+    transform: rotate(-1.8deg);
+  }
+
+  .p7-sticker {
+    left: auto;
+    right: -76px;
+    top: -92px;
+    bottom: auto;
+    max-width: 250px;
+    font-size: 23px;
+    padding: 12px 16px 13px;
+    transform: rotate(7.5deg);
+  }
+
+  .p7-reg-a {
+    right: 10.5vw;
+    top: 8px;
+  }
+
+  .p7-reg-b {
+    left: 55vw;
+    bottom: 104px;
+    width: 88px;
+    height: 88px;
+  }
+
+  .p7-inks {
+    height: 32px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--pink) 0 46px,
+      var(--blue) 46px 92px,
+      var(--yellow) 92px 138px,
+      var(--black) 138px 184px
+    );
+  }
+
+  .p7-foot {
+    grid-column: 1 / -1;
+    grid-row: 5;
+    min-height: 252px;
+    margin-top: -34px;
+  }
+
+  .p7-fogg {
+    left: 23vw;
+    top: auto;
+    bottom: 66px;
+    max-width: 34ch;
+    font-size: 12px;
+  }
+
+  .p7-cta {
+    margin-left: -3.6vw;
+    min-height: 104px;
+    padding: 0 44px 0 4.4vw;
+    font-size: clamp(2.6rem, 5.2vw, 4.2rem);
+  }
+
+  .p7-cta::before {
+    transform: translate(calc(11px + var(--sx)), calc(9px + var(--sy)));
+  }
+}
+
+/* Between the phone stack and a full sheet the grid has less room to spend, so
+   the plate takes columns back off the empty left margin. */
+@media (min-width: 760px) and (max-width: 1059px) {
+  .p7-plate {
+    grid-column: 2 / 10;
+  }
+
+  .p7-scrap-riso {
+    grid-column: 8 / 12;
+    height: 320px;
+    margin-right: 20px;
+  }
+
+  .p7-body {
+    margin-top: 96px;
+  }
+}
+
+/* ---- motion off -------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .p7-track {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .p7-l::before,
+  .p7-l::after,
+  .p7-hand-off img {
+    animation: none !important;
+    translate: none !important;
+  }
+}

@@ -1,0 +1,454 @@
+/* /10 DITHER. One bit: phosphor mint or the black of the tube. Nothing else.
+   The whole page is a live ordered-dither of the plume footage, and the type is
+   set to invert against it with mix-blend-mode: difference, so every glyph is
+   still made of exactly those two values. */
+
+.p10 {
+  --bg: #020604;
+  --mint: #c9ffe3;
+  --dim: #8fd3ae;
+  --line: rgba(201, 255, 227, 0.34);
+  --focus: #c9ffe3;
+  --hb-bg: #020604;
+  --hb-fg: #c9ffe3;
+  --hb-line: #2f7452;
+
+  position: relative;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--mint);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-variant-ligatures: none;
+}
+
+/* The field ------------------------------------------------------------- */
+
+.p10-field {
+  position: fixed;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
+  image-rendering: pixelated;
+}
+
+.p10-lattice {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.16;
+  mix-blend-mode: screen;
+  filter: hue-rotate(34deg) saturate(0.5) brightness(0.95);
+  pointer-events: none;
+}
+
+.p10-scan {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(180deg, rgba(2, 6, 4, 0.62) 0 1px, rgba(2, 6, 4, 0) 1px 3px),
+    radial-gradient(128% 104% at 54% 44%, rgba(2, 6, 4, 0) 34%, rgba(2, 6, 4, 0.86) 100%);
+}
+
+.p10-scrim {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    102deg,
+    rgba(2, 6, 4, 0.6) 0 18%,
+    rgba(2, 6, 4, 0.24) 46%,
+    rgba(2, 6, 4, 0) 72%
+  );
+}
+
+/* Registration marks at the corners of the tube. */
+.p10-crop {
+  position: fixed;
+  inset: 12px;
+  pointer-events: none;
+}
+
+.p10-crop i {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+}
+
+.p10-crop i:nth-child(1) {
+  top: 0;
+  left: 0;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+.p10-crop i:nth-child(2) {
+  top: 0;
+  right: 0;
+  border-top: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+}
+
+.p10-crop i:nth-child(3) {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+}
+
+.p10-crop i:nth-child(4) {
+  bottom: 0;
+  left: 0;
+  border-bottom: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+}
+
+/* Layout ---------------------------------------------------------------- */
+
+.p10-main {
+  position: relative;
+  min-height: 100dvh;
+  padding: 34px 72px 44px 44px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 268px;
+  grid-template-rows: auto auto 1fr;
+  grid-template-areas:
+    "rule rule"
+    "head head"
+    "col  rack";
+  align-items: end;
+  column-gap: 32px;
+}
+
+.p10-rule {
+  margin: 0;
+  height: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: rgba(201, 255, 227, 0.6);
+  font-size: 11px;
+  line-height: 12px;
+  letter-spacing: 0.36em;
+}
+
+.p10-rule-top {
+  grid-area: rule;
+}
+
+/* Ties the baseline of the head across to the far edge of the tube. */
+.p10-rule-under {
+  margin-top: 26px;
+  color: rgba(201, 255, 227, 0.42);
+  letter-spacing: 0.62em;
+}
+
+.p10-head {
+  grid-area: head;
+  min-width: 0;
+  padding-top: 6vh;
+  padding-bottom: 4vh;
+}
+
+.p10-h1 {
+  /* Shrink-wrapped so the box the dither goes quiet inside hugs the glyphs and
+     the plume is allowed to keep burning to the right of them. */
+  width: max-content;
+  max-width: 100%;
+  margin: 0;
+  color: var(--mint);
+  font-weight: 800;
+  font-size: clamp(3.05rem, 13.6vw, 10.25rem);
+  line-height: 0.8;
+  letter-spacing: -0.085em;
+  text-transform: uppercase;
+  mix-blend-mode: difference;
+}
+
+.p10-h1 span {
+  display: block;
+}
+
+.p10-w1 {
+  margin-left: -1.4vw;
+}
+
+.p10-w2 {
+  margin-left: 4vw;
+  color: transparent;
+  -webkit-text-stroke: 6px var(--mint);
+}
+
+.p10-w3 {
+  margin-left: -0.8vw;
+}
+
+/* The column ------------------------------------------------------------ */
+
+.p10-col {
+  grid-area: col;
+  min-width: 0;
+  width: min(38ch, 100%);
+  margin-bottom: 4px;
+  padding: 12px 18px 18px;
+  background: var(--bg);
+  border-left: 1px solid var(--mint);
+}
+
+.p10-body {
+  margin: 12px 0 0;
+  max-width: 34ch;
+  color: var(--mint);
+  font-size: 13px;
+  line-height: 1.62;
+}
+
+/* The lever. Set level with the body, not under it. */
+.p10-fogg {
+  position: relative;
+  margin: 18px 0 0;
+  max-width: 34ch;
+  padding-left: 14px;
+  color: var(--mint);
+  font-size: 11.5px;
+  font-weight: 700;
+  line-height: 1.7;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.p10-fogg::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 0;
+  width: 4px;
+  background: var(--mint);
+}
+
+.p10-cta {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  margin-top: 18px;
+  padding: 0 16px;
+  border: 1px solid var(--mint);
+  color: var(--mint);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+
+.p10-cta::after {
+  content: "\2588";
+  margin-left: 12px;
+  animation: p10-caret 1.6s steps(1) infinite;
+}
+
+@keyframes p10-caret {
+  0%,
+  54% {
+    opacity: 1;
+  }
+  55%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.p10-cta:hover {
+  background: var(--mint);
+  color: var(--bg);
+}
+
+/* The rack: the same feed at two other resolutions. ---------------------- */
+
+.p10-rack {
+  grid-area: rack;
+  justify-self: end;
+  align-self: end;
+  display: grid;
+  gap: 10px;
+  width: 268px;
+  margin-bottom: 4px;
+}
+
+.p10-inset {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  image-rendering: pixelated;
+  /* Deliberately out of register with the feed under it. */
+  transform: translateX(-26px);
+}
+
+.p10-reel {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.p10-reel video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Two values, same as everything else. The contrast stack thresholds the
+     footage flat so the honest feed is a stencil, not a photograph. */
+  filter: grayscale(1) brightness(0.92) contrast(22);
+}
+
+/* The honest feed, but still behind the glass of the same tube. */
+.p10-reel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--mint);
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.p10-reel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: repeating-linear-gradient(
+    180deg,
+    rgba(2, 6, 4, 0.55) 0 1px,
+    rgba(2, 6, 4, 0) 1px 3px
+  );
+  pointer-events: none;
+}
+
+.p10 .reel-play {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  bottom: 0;
+  min-width: 56px;
+  min-height: 44px;
+  padding: 0 10px;
+  background: var(--bg);
+  border: 1px solid var(--mint);
+  color: var(--mint);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* The word down the edge ------------------------------------------------ */
+
+.p10-vert {
+  position: fixed;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  margin: 0;
+  padding: 18px 7px;
+  writing-mode: vertical-rl;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  color: var(--dim);
+  font-size: 11px;
+  letter-spacing: 0.46em;
+  text-transform: uppercase;
+}
+
+/* Phone ------------------------------------------------------------------ */
+
+@media (max-width: 720px) {
+  .p10-main {
+    padding: 26px 36px 100px 20px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas:
+      "rule"
+      "head"
+      "rack"
+      "col";
+    align-items: start;
+    column-gap: 0;
+  }
+
+  .p10-head {
+    padding-top: 2vh;
+    padding-bottom: 0;
+  }
+
+  /* Let the phrases break where they have to: five lines of huge type is the
+     phone layout, not a shrunken version of the desktop one. */
+  .p10-h1 {
+    font-size: 18.6vw;
+    line-height: 0.82;
+    letter-spacing: -0.075em;
+  }
+
+  .p10-w1 {
+    margin-left: -1vw;
+  }
+
+  .p10-w2 {
+    margin-left: 13vw;
+    -webkit-text-stroke: 2px var(--mint);
+  }
+
+  .p10-w3 {
+    margin-left: -1vw;
+  }
+
+  /* Keep the offset, turn it down the other axis so nothing leaves the frame. */
+  .p10-inset {
+    transform: translateY(9px);
+  }
+
+  .p10-rack {
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    margin: 24px 0 16px;
+    gap: 8px;
+  }
+
+  .p10-col {
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  .p10-fogg {
+    max-width: none;
+  }
+
+  .p10-vert {
+    top: auto;
+    bottom: 108px;
+    transform: none;
+    padding: 14px 6px;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .p10-cta::after {
+    animation: none;
+    opacity: 1;
+  }
+}

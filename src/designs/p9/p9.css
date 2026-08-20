@@ -1,0 +1,847 @@
+/* /9 STROBE ---------------------------------------------------------------
+   Departure board, stadium rig. Black plastic, one acid yellow, filament
+   light. Bebas Neue is the whole voice; mono appears once, small.
+   ------------------------------------------------------------------------ */
+
+.p9 {
+  --ink: #100c06;
+  --acid: #ffe500;
+  --acid-dim: #6a5c10;
+  --bone: #f4f1e6;
+  --plastic-hi: #262018;
+  --plastic-lo: #080603;
+  --edge: #342d1c;
+
+  --focus: #ffe500;
+  --hb-bg: #100c06;
+  --hb-fg: #ffe500;
+  --hb-line: #574d1e;
+
+  --cell-w: clamp(34px, 8.1vw, 92px);
+  --cell-h: calc(var(--cell-w) * 1.44);
+  --cell-gap: clamp(3px, 0.55vw, 8px);
+  --rail-h: clamp(46px, 6.4vw, 88px);
+
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--bone);
+  font-family: 'Bebas Neue', 'Archivo Black', system-ui, sans-serif;
+}
+
+/* A soft warm floor of light under the whole rig. */
+.p9::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(120% 52% at 50% 42%, rgba(255, 229, 0, 0.09), transparent 62%),
+    radial-gradient(150% 60% at 50% 100%, rgba(255, 176, 0, 0.06), transparent 70%);
+}
+
+.p9-main {
+  position: relative;
+  z-index: 1;
+  display: block;
+  padding-bottom: 0;
+}
+
+/* Bulb rails ------------------------------------------------------------- */
+
+/* Duotone bulb rail: grayscale filament, one acid ink multiplied through it,
+   masked so the light dies into the page instead of ending on an edge. */
+.p9-rail {
+  position: relative;
+  height: var(--rail-h);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(180deg, #000 30%, rgba(0, 0, 0, 0.55) 68%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 30%, rgba(0, 0, 0, 0.55) 68%, transparent 100%);
+}
+
+.p9-rail::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/a/9/bulbs.jpg');
+  background-repeat: repeat-x;
+  background-size: auto 340%;
+  background-position: 0 26%;
+  filter: grayscale(1) contrast(1.35) brightness(1.05);
+  animation: p9-breathe 5.6s ease-in-out infinite;
+}
+
+.p9-rail::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--acid);
+  mix-blend-mode: multiply;
+}
+
+/* Mirrored, so the bottom rail hangs the same way the top one stands. */
+.p9-rail--bot {
+  transform: scaleY(-1);
+}
+
+.p9-rail--bot::before {
+  background-position: 96px 26%;
+  animation-delay: -1.5s;
+}
+
+@keyframes p9-breathe {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.86;
+  }
+}
+
+/* Marquee headline ------------------------------------------------------- */
+
+.p9-marquee {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  padding: clamp(10px, 1.6vw, 22px) 0 clamp(6px, 1vw, 14px);
+}
+
+.p9-marquee::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    var(--ink) 0%,
+    rgba(16, 12, 6, 0) 6.5%,
+    rgba(16, 12, 6, 0) 94%,
+    var(--ink) 100%
+  );
+}
+
+.p9-h1 {
+  display: flex;
+  align-items: baseline;
+  gap: 0.34em;
+  width: max-content;
+  margin: 0;
+  white-space: nowrap;
+  font-weight: 400;
+  font-size: clamp(2.9rem, 8.3vw, 6.8rem);
+  line-height: 0.92;
+  letter-spacing: -0.004em;
+  text-transform: uppercase;
+  color: var(--acid);
+  transform: translate3d(calc(-31.4% + var(--p9-slide, 0px)), 0, 0);
+  will-change: transform;
+}
+
+.p9-h1::before,
+.p9-h1::after {
+  content: '· ' attr(data-line);
+  color: transparent;
+  -webkit-text-stroke: 1.5px #5c5119;
+}
+
+/* Tick rule -------------------------------------------------------------- */
+
+.p9-hair {
+  position: relative;
+  height: 18px;
+  margin: 0 clamp(10px, 3vw, 48px);
+  border-top: 1px solid var(--acid);
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--acid-dim) 0 2px,
+    transparent 2px 26px
+  );
+  background-size: 100% 9px;
+  background-repeat: no-repeat;
+  opacity: 0.85;
+}
+
+.p9-hair--bot {
+  height: 14px;
+  margin-bottom: clamp(14px, 2.4vw, 30px);
+  border-top: 0;
+  border-bottom: 1px solid var(--acid);
+  background-position: 0 100%;
+  opacity: 0.6;
+}
+
+/* Stage: video wall behind, board on top --------------------------------- */
+
+.p9-stage {
+  position: relative;
+  width: min(100%, 1040px);
+  margin: clamp(18px, 3.4vw, 48px) auto 0;
+  padding: 0 clamp(10px, 3vw, 20px);
+  min-height: clamp(300px, 45vw, 590px);
+  display: grid;
+  place-items: center;
+}
+
+/* The rig rail: the board's own seam, carried out to both page edges. */
+.p9-stage::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -50vw;
+  width: 100vw;
+  height: 1px;
+  z-index: 1;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    #4e4415 14%,
+    #6b5c19 50%,
+    #4e4415 86%,
+    transparent 100%
+  );
+}
+
+.p9-wall {
+  position: absolute;
+  inset: 0 clamp(10px, 3vw, 20px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 0;
+  z-index: 0;
+}
+
+/* Each tile is a sheet of acid ink; the grayscale loop multiplies onto it, so
+   dimming a tile means dimming its ink, never dropping opacity over the whole
+   wall. That keeps any control inside a tile at full strength. One ink for all
+   nine and no gap between them: the wall has to read as a bed of light, not as
+   nine rectangles. What differs tile to tile is the footage, not the sheet. */
+.p9-tile {
+  position: relative;
+  overflow: hidden;
+  background: #ad9800;
+}
+
+.p9-tile img,
+.p9-reel video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.42) brightness(1.06);
+  mix-blend-mode: multiply;
+}
+
+.p9-reel {
+  position: absolute;
+  inset: 0;
+}
+
+.p9 .reel-play {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  bottom: 0;
+  transform: none;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 14px;
+  background: var(--acid);
+  color: var(--ink);
+  border: 0;
+  font: 400 18px/1 'Bebas Neue', system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* The wall is light, not picture: it dissolves into the black at its edges
+   instead of ending on a rectangle, and stays dark under the board. */
+.p9-wall::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      52% 58% at 50% 50%,
+      rgba(16, 12, 6, 0.9) 0%,
+      rgba(16, 12, 6, 0.3) 60%,
+      rgba(16, 12, 6, 0) 100%
+    ),
+    linear-gradient(
+      180deg,
+      var(--ink) 0%,
+      rgba(16, 12, 6, 0) 32%,
+      rgba(16, 12, 6, 0) 68%,
+      var(--ink) 100%
+    ),
+    linear-gradient(
+      90deg,
+      var(--ink) 0%,
+      rgba(16, 12, 6, 0) 21%,
+      rgba(16, 12, 6, 0) 79%,
+      var(--ink) 100%
+    );
+}
+
+/* Chassis ---------------------------------------------------------------- */
+
+.p9-chassis {
+  position: relative;
+  z-index: 3;
+  padding: clamp(10px, 1.6vw, 20px) clamp(10px, 1.6vw, 20px) clamp(8px, 1.2vw, 14px);
+  background:
+    linear-gradient(180deg, #1a150d 0%, #0a0805 58%, #050403 100%);
+  border: 1px solid var(--edge);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.9),
+    0 26px 70px rgba(0, 0, 0, 0.85),
+    0 0 120px rgba(255, 229, 0, 0.2),
+    inset 0 1px 0 rgba(255, 229, 0, 0.14);
+}
+
+/* board.jpg as the chassis' own plastic. The foot deck is cut from the same
+   sheet, so it takes the same three rules. */
+.p9-chassis::before,
+.p9-deck::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: url('/a/9/board.jpg');
+  background-size: cover;
+  background-position: 50% 62%;
+  opacity: 0.22;
+  mix-blend-mode: screen;
+}
+
+/* Four rivets. */
+.p9-chassis::after,
+.p9-deck::after {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, #4b421f 0 1.5px, rgba(0, 0, 0, 0.7) 1.5px 3px, transparent 3px),
+    radial-gradient(circle, #4b421f 0 1.5px, rgba(0, 0, 0, 0.7) 1.5px 3px, transparent 3px),
+    radial-gradient(circle, #4b421f 0 1.5px, rgba(0, 0, 0, 0.7) 1.5px 3px, transparent 3px),
+    radial-gradient(circle, #4b421f 0 1.5px, rgba(0, 0, 0, 0.7) 1.5px 3px, transparent 3px);
+  background-repeat: no-repeat;
+  background-size: 8px 8px;
+  background-position: 0 0, 100% 0, 0 100%, 100% 100%;
+}
+
+.p9-flap {
+  position: relative;
+  z-index: 1;
+}
+
+.p9-row {
+  display: flex;
+  gap: var(--cell-gap);
+  justify-content: center;
+}
+
+/* One flap cell ---------------------------------------------------------- */
+
+.p9-cell {
+  position: relative;
+  width: var(--cell-w);
+  height: var(--cell-h);
+  perspective: 420px;
+  background: linear-gradient(180deg, var(--plastic-hi) 0%, #0b0805 49%, #17110a 51%, var(--plastic-lo) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 240, 190, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.95),
+    inset 1px 0 0 rgba(255, 240, 190, 0.04),
+    0 3px 10px rgba(0, 0, 0, 0.8);
+  overflow: hidden;
+}
+
+.p9-half {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 50%;
+  overflow: hidden;
+}
+
+.p9-half::before,
+.p9-leaf::before {
+  content: attr(data-ch);
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 200%;
+  font-family: 'Bebas Neue', system-ui, sans-serif;
+  font-size: calc(var(--cell-w) * 1.06);
+  line-height: var(--cell-h);
+  text-align: center;
+  color: var(--acid);
+  text-shadow: 0 0 calc(var(--cell-w) * 0.22) rgba(255, 229, 0, 0.45);
+}
+
+.p9-half--top {
+  top: 0;
+}
+
+.p9-half--top::before {
+  top: 0;
+}
+
+.p9-half--bot {
+  bottom: 0;
+}
+
+.p9-half--bot::before {
+  bottom: 0;
+}
+
+.p9-half--top {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.28));
+}
+
+.p9-half--bot {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.5), rgba(255, 255, 255, 0.02));
+}
+
+.p9-seam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% - 2px);
+  height: 4px;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.55) 0 1px,
+    rgba(0, 0, 0, 1) 1px 3px,
+    rgba(255, 238, 180, 0.13) 3px 4px
+  );
+  z-index: 4;
+}
+
+/* The falling leaf, only while a cell is spinning. */
+.p9-leaf {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 50%;
+  overflow: hidden;
+  transform-origin: 50% 100%;
+  backface-visibility: hidden;
+  background: linear-gradient(180deg, #241d12, #0a0805);
+  z-index: 3;
+}
+
+.p9-leaf::before {
+  top: 0;
+}
+
+.p9-cell[data-spin='1'] .p9-leaf {
+  display: block;
+  animation: p9-fall 340ms linear infinite;
+}
+
+@keyframes p9-fall {
+  0% {
+    transform: rotateX(0deg);
+  }
+  62% {
+    transform: rotateX(-88deg);
+  }
+  100% {
+    transform: rotateX(-90deg);
+  }
+}
+
+.p9-cell[data-land='1'] .p9-half--bot {
+  transform-origin: 50% 0;
+  animation: p9-land 220ms cubic-bezier(0.2, 0.9, 0.3, 1) 1;
+}
+
+@keyframes p9-land {
+  0% {
+    transform: rotateX(84deg);
+  }
+  70% {
+    transform: rotateX(-6deg);
+  }
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+
+/* Slim second row of blank tiles: the board is a board, not one word. */
+.p9-sub {
+  display: flex;
+  gap: var(--cell-gap);
+  justify-content: center;
+  margin-top: var(--cell-gap);
+}
+
+.p9-slot {
+  width: calc((var(--cell-w) * 8 + var(--cell-gap) * 7 - var(--cell-gap) * 17) / 18);
+  height: clamp(9px, 1.3vw, 16px);
+  background: linear-gradient(180deg, #1c1710 0 48%, #050402 52% 100%);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.p9-slot:nth-child(4n + 1) {
+  background: linear-gradient(180deg, #241c0a 0 48%, #0b0803 52% 100%);
+}
+
+/* board.jpg as a full bleed band of spilled light ------------------------ */
+
+.p9-plate {
+  position: relative;
+  height: clamp(74px, 10vw, 138px);
+  margin-top: clamp(4px, 0.8vw, 12px);
+  overflow: hidden;
+}
+
+.p9-plate img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 42% 56%;
+  filter: saturate(1.5) contrast(1.15) brightness(1.05);
+}
+
+.p9-plate::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, var(--ink) 0%, rgba(16, 12, 6, 0) 34%, rgba(16, 12, 6, 0) 62%, var(--ink) 100%),
+    linear-gradient(90deg, var(--ink) 0%, rgba(16, 12, 6, 0) 22%, rgba(16, 12, 6, 0) 78%, var(--ink) 100%);
+}
+
+/* Foot: the lower deck of the same rig ----------------------------------- */
+
+.p9-foot {
+  position: relative;
+  /* The last band of the page keeps its bottom-right corner empty: the fixed
+     .homebar chip lives there and may not land on the CTA or the lever line. */
+  padding: clamp(18px, 2.6vw, 34px) clamp(14px, 4vw, 56px) clamp(84px, 12vw, 110px);
+}
+
+/* One more sheet of black plastic, driven off the left edge of the page so the
+   stack stops being an axis. Bolted, seamed and slotted like the board.
+   --bleed is how far past the page edge the sheet runs; the same figure is
+   added back as padding so no word ever crosses the frame. */
+.p9-deck {
+  --bleed: calc(clamp(14px, 4vw, 56px) + 12px);
+
+  position: relative;
+  padding: clamp(14px, 1.9vw, 24px) clamp(16px, 2.6vw, 34px) clamp(18px, 2.4vw, 30px);
+  padding-left: calc(var(--bleed) + clamp(8px, 1.4vw, 20px));
+  margin-left: calc(-1 * var(--bleed));
+  background: linear-gradient(180deg, #1a150d 0%, #0a0805 58%, #050403 100%);
+  border: 1px solid var(--edge);
+  border-left: 0;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.9),
+    0 26px 70px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 229, 0, 0.11);
+}
+
+/* The board's blank sub row, run the full width of the deck as its top seam. */
+/* The deck is a much bigger sheet than the chassis, so board.jpg is pushed in
+   hard and dropped right down: on this surface it has to be grain in the
+   plastic, not a photograph sitting behind the type. */
+.p9-deck::before {
+  opacity: 0.08;
+  background-size: 320%;
+  background-position: 64% 30%;
+}
+
+.p9-strip {
+  display: flex;
+  gap: var(--cell-gap);
+  margin-bottom: clamp(14px, 2.2vw, 28px);
+}
+
+.p9-strip .p9-slot {
+  flex: 1 1 0;
+  width: auto;
+}
+
+/* Two slots left lit, the way a board keeps a couple of cells burning. */
+.p9-strip .p9-slot:nth-child(6),
+.p9-strip .p9-slot:nth-child(23) {
+  background: linear-gradient(180deg, var(--acid) 0 48%, #7c6f00 52% 100%);
+}
+
+.p9-say {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  max-width: 19ch;
+  font-size: clamp(1.7rem, 5.4vw, 3.4rem);
+  line-height: 0.98;
+  letter-spacing: 0.012em;
+  text-transform: uppercase;
+  color: var(--bone);
+}
+
+/* The CTA is a flap cell that settled on yellow: hard edges, the cell's own
+   hairline split across the middle, and it hangs off the deck rather than
+   sitting inside it. */
+.p9-cta {
+  position: relative;
+  z-index: 2;
+  display: block;
+  width: fit-content;
+  /* Two moulded halves, lighter above the split than below, exactly the way a
+     flap cell catches the light. */
+  background: linear-gradient(180deg, #ffef58 0 50%, #edd100 50% 100%);
+  color: var(--ink);
+  text-decoration: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.32),
+    0 10px 34px rgba(0, 0, 0, 0.8),
+    0 0 54px rgba(255, 229, 0, 0.24);
+}
+
+.p9-cta-face {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  /* The label and its arrow are one flap. Never let them break across lines. */
+  white-space: nowrap;
+  min-height: clamp(60px, 6vw, 78px);
+  padding: 0 clamp(18px, 2.6vw, 34px);
+  font-size: clamp(1.35rem, 3.2vw, 2.5rem);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.p9-cta svg {
+  flex: none;
+}
+
+.p9-cta-seam {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(50% - 1.5px);
+  height: 3px;
+  /* Highlight first, shadow under it: a moulded ridge in the plastic. A dark
+     line here would read as a rule struck through the words. */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.72) 0 1px,
+    rgba(122, 102, 0, 0.3) 1px 3px
+  );
+}
+
+.p9-cta:hover {
+  background: var(--bone);
+}
+
+.p9-cta:focus-visible {
+  outline: 3px solid var(--acid);
+  outline-offset: 5px;
+}
+
+.p9-fogg {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
+  font-size: 11px;
+  line-height: 1.7;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #cbb93f;
+}
+
+/* Narrow: the marquee would eat the end of the sentence, so on a phone the
+   headline stops travelling and stacks instead. Bigger, not squashed. */
+@media (max-width: 779px) {
+  .p9 {
+    --cell-w: 40px;
+    --cell-gap: 2px;
+  }
+
+  .p9-marquee {
+    padding: clamp(14px, 4vw, 22px) 14px clamp(10px, 2.4vw, 16px);
+  }
+
+  .p9-marquee::after {
+    display: none;
+  }
+
+  .p9-h1 {
+    display: block;
+    width: auto;
+    white-space: normal;
+    transform: none;
+    font-size: clamp(2.55rem, 13.4vw, 4.2rem);
+    line-height: 0.86;
+    text-wrap: balance;
+  }
+
+  .p9-h1::before,
+  .p9-h1::after {
+    content: none;
+  }
+
+  .p9-stage {
+    padding: 0 8px;
+  }
+
+  .p9-wall {
+    inset: 0 8px;
+  }
+
+  .p9-chassis {
+    padding: 8px 8px 6px;
+  }
+
+  .p9-stage {
+    min-height: 252px;
+  }
+
+  /* On a phone the sheet is driven off the RIGHT edge instead, so the whole
+     bottom-right corner of the page is blank plastic and the fixed .homebar
+     chip has nothing to sit on but hardware. Every word stays left of 285px. */
+  .p9-deck {
+    margin-left: 34px;
+    margin-right: calc(-1 * var(--bleed));
+    border-left: 1px solid var(--edge);
+    border-right: 0;
+    padding: 12px calc(var(--bleed) + 8px) 34px 16px;
+  }
+
+  .p9-strip {
+    margin-bottom: 16px;
+  }
+
+  .p9-say {
+    max-width: none;
+    margin-bottom: 26px;
+    font-size: 2.15rem;
+    line-height: 0.94;
+  }
+
+  /* The yellow cell breaks the deck's left border and lands almost on the page
+     edge: the same fall as the wide layout, thrown the other way. */
+  .p9-cta {
+    margin-left: -44px;
+  }
+
+  /* Both of these are held left of 280px, so the fixed .homebar chip in the
+     bottom right corner has nothing under it but blank plastic. */
+  .p9-fogg {
+    margin-left: -44px;
+    max-width: 250px;
+    margin-top: 26px;
+  }
+}
+
+/* Wide ------------------------------------------------------------------- */
+
+@media (min-width: 780px) {
+  /* The board hangs left of the wall's centre. The rig is not symmetrical and
+     the eye should find that out before it finds the words. */
+  .p9-chassis {
+    margin-right: clamp(0px, 9.5vw, 122px);
+  }
+
+  .p9-deck {
+    --bleed: calc(clamp(14px, 4vw, 56px) + clamp(18px, 3.6vw, 58px));
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      'strip strip'
+      'say   cta'
+      'fogg  .';
+    column-gap: clamp(24px, 4vw, 64px);
+    row-gap: clamp(16px, 2.2vw, 28px);
+    /* Runs off the left edge, stops well short of the right: the .homebar
+       column stays black. */
+    margin-right: clamp(104px, 30vw, 430px);
+  }
+
+  /* The slot rail is the rig, not the deck's own trim: it carries on past the
+     deck's right border and off the page, and the deck hangs from its left
+     end. That is what the black to the right of the deck is under. */
+  .p9-strip {
+    grid-area: strip;
+    margin-right: calc(-1 * (clamp(104px, 30vw, 430px) + clamp(14px, 4vw, 56px)) - 24px);
+  }
+
+  .p9-strip .p9-slot {
+    height: clamp(12px, 1.5vw, 19px);
+  }
+
+  .p9-say {
+    grid-area: say;
+    max-width: 16ch;
+  }
+
+  .p9-fogg {
+    grid-area: fogg;
+    align-self: end;
+  }
+
+  /* The yellow cell has fallen out of the deck: it breaks the right border and
+     drops through the row below, and it is the only thing on the page allowed
+     to overhang anything. */
+  .p9-cta {
+    grid-area: cta;
+    align-self: end;
+    margin-right: calc(-1 * clamp(40px, 6vw, 88px));
+    margin-bottom: calc(-1 * clamp(46px, 8.6vw, 120px));
+  }
+
+  .p9-hair {
+    height: 22px;
+  }
+
+  /* Wide, the CTA and the lever line stop 280px short of the right edge, so
+     the .homebar corner is already black: the reserve only has to clear the
+     tile that hangs below the deck. */
+  .p9-foot {
+    padding-bottom: clamp(58px, 6vw, 82px);
+  }
+}
+
+/* Reduced motion --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .p9-rail::before {
+    animation: none;
+    opacity: 0.72;
+  }
+
+  .p9-cell[data-spin='1'] .p9-leaf {
+    display: none;
+  }
+
+  .p9-cell[data-land='1'] .p9-half--bot {
+    animation: none;
+    transform: none;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) and (min-width: 780px) {
+  .p9-h1 {
+    transform: translate3d(-31.4%, 0, 0);
+  }
+}
